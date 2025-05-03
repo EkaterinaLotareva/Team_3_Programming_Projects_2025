@@ -5,8 +5,8 @@ class Hex:
         self.zone = zone
         self.animals = animals
         self.buildings = buildings
-        self.circles = None
-        self.squares = None
+        self.circles = []
+        self.squares = []
 
 class Field:
     def __init__(self, hex: dict, hints):
@@ -28,8 +28,10 @@ class Field:
         z2 = -x2 -y2
         return((abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2))/2)
 
-    def add_circles(self):
+    def add_circles(self, coords, player):
+        self.hex[coords].circles.append(player)
 
-    def add_squares(self):
+    def add_squares(self, coords, player):
+        self.hex[coords].squares.append(player)
 
     def search(self):
