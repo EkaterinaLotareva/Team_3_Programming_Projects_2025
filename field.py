@@ -1,11 +1,20 @@
-class Field:
-    def __init__(self, zone, animals, buildings: dict, kryptid: tuple, circles, squares: list):
+class Hex:
+    def __init__(self, coords, zone, animals, buildings):
+        self.coords = coords
         self.zone = zone
         self.animals = animals
         self.buildings = buildings
-        self.kryptid = kryptid
-        self.circles = circles
-        self.squares = squares
+        self.circles = None
+        self.squares = None
+
+class Field:
+    def __init__(self, hex: dict, hints):
+        """ hex - словарь из клеток в формате: {(x, y): [zone, animals, building]} """
+        self.hints = hints
+        self.hex = {}
+
+        for coords in hex.keys():
+            self.hex[coords] = Hex(coords, *hex[coords])
 
     def add_circles(self):
 
