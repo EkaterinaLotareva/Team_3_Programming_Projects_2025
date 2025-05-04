@@ -1,21 +1,19 @@
 class Hex:
-    def __init__(self, coords, zone, animals, buildings):
+    def __init__(self, zone, animal, building):
         """ клетка поля """
-        self.coords = coords
         self.zone = zone
-        self.animals = animals
-        self.buildings = buildings
+        self.animal = animal
+        self.building = building
         self.circles = []
         self.squares = []
 
 class Field:
-    def __init__(self, hex: dict, hints):
+    def __init__(self, hex: dict):
         """ hex - словарь из клеток в формате: {(x, y): [zone, animals, building]} """
-        self.hints = hints
         self.hex = {}
 
         for coords in hex.keys():
-            self.hex[coords] = Hex(coords, *hex[coords])
+            self.hex[coords] = Hex(*hex[coords])
 
         """ self.hex - словарь из объектов класса Hex в формате: {(x, y): Hex((x, y), zone, animals, building)}"""
 
