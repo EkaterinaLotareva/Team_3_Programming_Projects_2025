@@ -1,23 +1,51 @@
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
+
+from .custom_types import coordinates, Building, Zone
+
+@dataclass(frozen=True)
 class Hex:
-    def __init__(self, zone, animal, building):
-        """ клетка поля """
-        self.zone = zone
-        self.animal = animal
-        self.building = building
-        self.circles = []
-        self.squares = []
+    zone: str
+    animal: str
+    building: str
+    circles: list[str]
+    squares: list[str]
+    
+    
+class Hint(ABC):
+    @abstractmethod
+    def check(self, cell: Hex, field: dict[coordinates, Hex]) -> bool:
+        pass
+    
+
+@dataclass
+class BuildingHint(Hint):
+    distance: int
+    building: Building
+    
+    def check(self, cell: Hex) -> bool:
+        return ...
+    
+
+@dataclass
+class SingleZoneHint(Hint):
+    zone: Zone
+
+    def check(self, cell: Hex) -> bool:
+        return ...
+
 
 class Field:
-    def __init__(self, hex: dict):
+    def __init__(self, hex: dict[coordinates, Hex]):
         """ hex - словарь из клеток в формате: {(x, y): [zone, animals, building]} """
         self.hex = {}
-
+        
         for coords in hex.keys():
             self.hex[coords] = Hex(*hex[coords])
 
         """ self.hex - словарь из объектов класса Hex в формате: {(x, y): Hex((x, y), zone, animals, building)}"""
 
-    def calculate_distance(self, coords_1, coords_2: list):
+    def calculate_distance(self, coords_1: list[...], coords_2: list[...]):
         x1 = coords_1[0]
         y1 = coords_1[1]
         x2 = coords_2[0]
@@ -33,3 +61,4 @@ class Field:
         self.hex[coords].squares.append(player)
 
     def search(self):
+        pass
