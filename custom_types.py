@@ -2,26 +2,26 @@ from enum import Enum
 
 coordinates = tuple[int, int]
 
-
 class Color(Enum):
-    BLACK = 'black'
     WHITE = 'white'
-    RED = 'red'
     GREEN = 'green'
     BLUE = 'blue'
-    
 
 class Zone(Enum):
     SWAMP = 'swamp'
-    
+    DESERT = 'desert'
+    MOUNTAINS = 'mountains'
+    FOREST = 'forest'
+    WATER = 'water'
 
 class BuildingType(Enum):
     HUT = 'hut'
     MONUMENT = 'monument'
-    
 
 class Animal(Enum):
-    pass
-    
-    
+    BEAR = 'bear'
+    JAGUAR = 'jaguar'
+
+
 Building = tuple[BuildingType, Color]
+
