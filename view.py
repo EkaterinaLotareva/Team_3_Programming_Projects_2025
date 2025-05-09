@@ -1,47 +1,34 @@
+import pygame 
+import math
+import field
+from config import ROWS, COLS, WIDTH, HEIGHT, hex_height, hex_radius, hex_width, offset_x, offset_y 
+
+
 class View:
-    def __init__(self, field, screen):
+
+    def __init__(self, field, screen): #филд - словарь
         self.field = field
         self.screen = screen
-import pygame
-import math
 
-pass
-#параметры экрана - ?
-ROWS, COLS = 9, 12
-WIDTH, HEIGHT = 1200, 900  
-
-hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
-hex_radius = hex_height/2   #радиус гекса
-hex_width = hex_radius * 2 / math.sqrt(3)  #ширина гекса
+    #перевод в пиксели:
+    def pixelization(self, row, col):
+        x = offset_x + hex_width/2 + (cols-1)*hex_width
+        y = offset_y + (hex_height/2)*cols + (rows-1)*hex_height
+        return x, y 
 
 
-offset_x = (WIDTH - (COLS - 1)*hex_width * 3/4 - hex_width)//2
-offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
+    def draw_hex(self, surface, row, col):
+        x, y = self.pixelization(row, col)
+        pygame.circle(surface, (x, y), hex_radius)
 
+    def transform_coords(self, row, col):
+    # переводит смещенные координаты в осевые
+        y_new = 5 - (row - 1) + (col - col/2 - 0.5)*(0 ** (1 - (col % 2))) + (col - col/2 - 1)*(0 ** (col % 2))
+        x_new = 11 - (row -1) - (col - col/2 - 0.5)*(0 ** (1 - (col % 2))) - (col - col/2 - 1)*(0 ** (col % 2))
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))    
-clock = pygame.time.Clock()
-
-#перевод в пиксели:
-def pixelization(row, col):
-    x = offset_x + col * hex_width * 3/4
-    y = offset_y + row * hex_height * 3/4
-    return int(x + hex_width / 2) , int(y + hex_height / 2)
-
-#класс клеточки
-class cell:
-    def init(self, row, col, biome, building = None, animal = None):
-        self.row = row
-        self.col = col
-        self.biome = biome
-        self.building = building
-        self.animal = animal
-
-def drawing(surface, cell, images, hex_radius):
-    x, y = pixelization(cell.row, cell.coll)
-
-    biome_bild = images['biome'][cell.biome]
-    biome_bild = pygame.transform.smoothscale(biome_bild, (int(hex_radius*1,7), int(hex_radius*1,7)))
-    rect = biome_bild.get_rect(center = (x, y))
-    surface.blit(biome_bild, rect)
+    def draw_field(self, surface, field):
+        for i in range(ROWS):
+            for j in range(COLS):
+                axis_coords = self.transform_coords((i, j))
+                hex = field[axis_coords]
+                self.drawing(surface, hex, i, j)

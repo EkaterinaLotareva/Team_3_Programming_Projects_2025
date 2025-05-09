@@ -2,7 +2,7 @@ import pygame
 pygame.init()
 
 
-sc = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
+screen = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
 pygame.display.set_caption('test')
 fps = 60
 clock = pygame.time.Clock()

@@ -39,3 +39,15 @@ test_hex = {(0, 0): ['mountain', 'jaguar', None], (1, 0): ['forest', None, None]
 test_hints = ((3, ('building', 'white')), (0, ('swamp', 'desert')), (1, ('zone', 'water')))
 '''пример для животных: (2, ('animal', 'bear'))
    пример для типа строения: (3, ('building', 'monument'))'''
+
+
+ROWS, COLS = 9, 12
+WIDTH, HEIGHT = 1200, 900  
+
+hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
+hex_radius = hex_height/2   #радиус гекса
+hex_width = hex_radius * 2 / math.sqrt(3)  #ширина гекса
+
+
+offset_x = (WIDTH - (COLS - 1)*hex_width * 3/4 - hex_width)//2
+offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
