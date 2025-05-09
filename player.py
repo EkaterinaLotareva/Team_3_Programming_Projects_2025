@@ -1,5 +1,4 @@
 class Player:
-
     def __init__(self, hint, color, field):
         self.hint = hint
         self.color = color
