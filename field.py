@@ -1,20 +1,22 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-from .custom_types import coordinates, Building, Zone
+from custom_types import coordinates, Building, Zone
 
 @dataclass(frozen=True)
 class Hex:
+
     zone: str
     animal: str
     building: str
     circles: list[str]
     squares: list[str]
-    
+
+
     
 class Hint(ABC):
     @abstractmethod
-    def check(self, cell: Hex, field: dict[coordinates, Hex]) -> bool:
+    def check(self, cell: coordinates, field: dict[coordinates, Hex]) -> bool:
         pass
     
 
@@ -23,7 +25,7 @@ class BuildingHint(Hint):
     distance: int
     building: Building
     
-    def check(self, cell: Hex) -> bool:
+    def check(self, cell: coordinates, field: dict[coordinates, Hex]) -> bool:
         return ...
     
 
@@ -31,7 +33,7 @@ class BuildingHint(Hint):
 class SingleZoneHint(Hint):
     zone: Zone
 
-    def check(self, cell: Hex) -> bool:
+    def check(self, cell: coordinates, field: dict[coordinates, Hex]) -> bool:
         return ...
 
 

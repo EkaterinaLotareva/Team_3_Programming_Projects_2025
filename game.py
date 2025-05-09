@@ -1,12 +1,12 @@
 import pygame
 import player
 import view
-
-from .field import Hint, Hex
+import field
+from config import test_hex
 
 class Game:
     def __init__ (self, screen):
-        self.field = ...
+        self.field = field.Field(test_hex)
         self.screen = screen
         self.players = (player.Player(), player.Player(), player.Player)
         self.turn = 1
