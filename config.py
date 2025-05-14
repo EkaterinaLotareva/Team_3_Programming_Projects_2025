@@ -49,6 +49,9 @@ hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
 hex_radius = hex_height/2   #радиус гекса
 hex_width = hex_radius * 2 / math.sqrt(3)  #ширина гекса
 
+radius = 30 # размер шестиугольника
+offset_x_1 = WIDTH // 2
+offset_y_1 = HEIGHT // 2
 
 offset_x = (WIDTH - (COLS - 1)*hex_width * 3/4 - hex_width)//2
 offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2

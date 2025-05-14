@@ -13,6 +13,7 @@ while flRunning:
         if event.type == pygame.QUIT:
             pygame.quit()
             flRunning = False
+    
     clock.tick(fps)
 
 
