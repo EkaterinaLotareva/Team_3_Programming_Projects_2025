@@ -1,7 +1,7 @@
 import pygame 
 import math
 from field import Field
-from config import ROWS, COLS, WIDTH, HEIGHT, hex_height, hex_radius, hex_width, offset_x, offset_y, offset_x_1, offset_y_1, radius BLACK
+from config import *
 
 
 class View:
@@ -21,25 +21,17 @@ class View:
         x = offset_x + hex_width/2 + (col-1)*hex_width
         y = offset_y + (hex_height/2)*col + (row-1)*hex_height
         return x, y
-    def draw_hex(self, surface, row, col):      # пока рисует одинаковые кружочки вместо шестиугольников
-        x, y = self.pixelization(row, col)
-        pygame.draw.circle(surface, color=BLACK, center=(x, y), radius=hex_radius)
 
-    def draw_field(self, surface, field):
-        for i in range(ROWS):
-            for j in range(COLS):
-                self.draw_hex(surface, i, j)
-    # Катя, посмотри возможно ниже нужно было писать self и что-то ещё
-    def to_pygame_coords(x, y):
+    def to_pygame_coords(self, x, y):
         """С помощью этой функции мы можем двигать, все координаты (в Pygame идёт отсчёт с левого верхнего угла)"""
         pygame_x = x + offset_x_1
         pygame_y = -y + offset_y_1  # Инвертируем Y, чтобы ось смотрела вверх
         return (pygame_x, pygame_y)
-    def new_coordinates(x_old, y_old): # Эта функция позволяет перейти от логических координат шестиугольников к тем визуальным
+    def new_coordinates(self, x_old, y_old): # Эта функция позволяет перейти от логических координат шестиугольников к тем визуальным
         x_new = x_old*(-1)*radius*3/2 + y_old*radius*3/2
         y_new = (x_old + y_old)*radius*(3**0.5)/2
         return (x_new, y_new)
-    def calculate_hexagon_vertices(center_x, center_y, radius): #Эта функция позволяет рисовать через polygon
+    def calculate_hexagon_vertices(self, center_x, center_y, radius): #Эта функция позволяет рисовать через polygon
         """
     Возвращает список координат вершин правильного шестиугольника.
     Параметры:
@@ -65,9 +57,16 @@ class View:
             vertices.append((round(x), round(y)))
     
         return vertices
-    def draw_hexagon(i): 
-        pygame.draw.polygon(screen, color_green, calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius)) # Рисует сам шестиугольник
-        pygame.draw.polygon(screen, color_green, calculate_hexafon_verticles(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius), 3) # Рисует обводку вокруг него
-    def draw_field(test_hex):
+    def draw_hexagon(self, i):
+        pygame.draw.polygon(screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius)) # Рисует сам шестиугольник
+        pygame.draw.polygon(screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius), 3) # Рисует обводку вокруг него
+    def draw_field(self, test_hex):
         for i in test_hex.keys():
-            draw_hexgon(i)
+            self.draw_hexgon(i)
+
+
+    def draw_circle(self, hex, color):
+        pass
+
+    def draw_square(self, hex, color):
+        pass

@@ -36,9 +36,10 @@ test_hex = {(0, 0): ['mountain', 'jaguar', None], (1, 0): ['forest', None, None]
             (7, 7): ['swamp', None, None], (8, 7): ['forest', None, None], (9, 7): ['forest', None, None],
             (7, 8): ['swamp', None, None], (7, 9): ['swamp', None, None], (8, 8): ['swamp', None, None]}
 
-test_hints = ((3, ('building', 'white')), (0, ('swamp', 'desert')), (1, ('zone', 'water')))
-'''пример для животных: (2, ('animal', 'bear'))
-   пример для типа строения: (3, ('building', 'monument'))'''
+test_hints = (('building color', 'white', 3), ('two zones', ('swamp', 'desert')), ('zone', 'water', 1))
+'''пример для животных: ('animal', 'bear', 2)
+   пример для типа строения: ('building type', 'hut', 3)'''
+
 
 import math
 
@@ -58,3 +59,6 @@ offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
 
 
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)

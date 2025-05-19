@@ -6,6 +6,7 @@ class Color(Enum):
     WHITE = 'white'
     GREEN = 'green'
     BLUE = 'blue'
+    NONE = None
 
 class Zone(Enum):
     SWAMP = 'swamp'
@@ -13,15 +14,18 @@ class Zone(Enum):
     MOUNTAINS = 'mountains'
     FOREST = 'forest'
     WATER = 'water'
+    NONE = None
 
 class BuildingType(Enum):
     HUT = 'hut'
     MONUMENT = 'monument'
+    NONE = None
 
 class Animal(Enum):
     BEAR = 'bear'
     JAGUAR = 'jaguar'
+    NONE = None
 
 
-Building = tuple[BuildingType, Color]
+Building = tuple[BuildingType, Color] or None
 
