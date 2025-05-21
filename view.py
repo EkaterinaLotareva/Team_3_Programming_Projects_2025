@@ -2,6 +2,7 @@ import pygame
 import math
 from field import Field
 from config import *
+from custom_types import *
 
 
 class View:
@@ -58,15 +59,19 @@ class View:
     
         return vertices
     def draw_hexagon(self, i):
-        pygame.draw.polygon(screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius)) # Рисует сам шестиугольник
-        pygame.draw.polygon(screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius), 3) # Рисует обводку вокруг него
-    def draw_field(self, test_hex):
-        for i in test_hex.keys():
-            self.draw_hexgon(i)
+        pygame.draw.polygon(self.screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius)) # Рисует сам шестиугольник
+        pygame.draw.polygon(self.screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius), 3) # Рисует обводку вокруг него
+    def draw_field(self, field):
+        for i in field.keys():
+            self.draw_hexagon(i)
 
 
-    def draw_circle(self, hex, color):
+    def draw_circle(self, hex: coordinates, color):
         pass
 
-    def draw_square(self, hex, color):
+    def draw_square(self, hex: coordinates, color):
         pass
+
+    def from_pixels_to_logic(self, coords: coordinates):
+        pass
+
