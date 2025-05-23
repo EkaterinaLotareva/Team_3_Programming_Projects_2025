@@ -59,8 +59,8 @@ class View:
     
         return vertices
     def draw_hexagon(self, i):
-        pygame.draw.polygon(self.screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius)) # Рисует сам шестиугольник
-        pygame.draw.polygon(self.screen, color_green, self.calculate_hexagon_vertices(*to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius), 3) # Рисует обводку вокруг него
+        pygame.draw.polygon(self.screen, color_green, self.calculate_hexagon_vertices(*self.to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius)) # Рисует сам шестиугольник
+        pygame.draw.polygon(self.screen, color_green, self.calculate_hexagon_vertices(*self.to_pygame_coords(*new_coordinates(x_coord, y_coord)), radius), 3) # Рисует обводку вокруг него
     def draw_field(self, field):
         for i in field.keys():
             self.draw_hexagon(i)
