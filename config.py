@@ -57,8 +57,3 @@ offset_y_1 = HEIGHT // 2
 offset_x = (WIDTH - (COLS - 1)*hex_width * 3/4 - hex_width)//2
 offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
 
-
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
