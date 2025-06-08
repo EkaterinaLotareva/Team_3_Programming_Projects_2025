@@ -87,6 +87,7 @@ class Game:
             self.process_number_key(event)
             if (self.mouse_click_logic != None) and self.check_find(event):
                 self.find()
+                break
         if (self.mouse_click_logic != None) and (self.player_asked != None):
             self.answer(self.mouse_click_logic, self.player_asked)
             self.mouse_click_logic = None

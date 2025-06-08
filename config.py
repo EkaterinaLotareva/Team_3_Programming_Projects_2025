@@ -1,6 +1,4 @@
 import math
-import pygame
-import numpy as np
 test_hex = {(0, 0): ['mountain', 'jaguar', None], (1, 0): ['forest', None, None], (2, 0): ['forest', None, None],
             (3, 0): ['swamp', None, None], (4, 0): ['swamp', None, None], (5, 0): ['mountain', None, None],
             (6, 0): ['mountain', None, None], (0, 1): ['swamp', 'jaguar', None], (0, 2): ['forest', None, None],
@@ -46,7 +44,7 @@ test_hints = (('building color', 'white', 3), ('two zones', ('swamp', 'desert'))
 
 
 ROWS, COLS = 9, 12
-WIDTH, HEIGHT = 1000, 500
+WIDTH, HEIGHT = 1500, 1000
 
 hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
 hex_radius = hex_height/2   #радиус гекса
