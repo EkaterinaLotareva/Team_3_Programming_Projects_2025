@@ -46,34 +46,24 @@ test_hints = (('building color', 'white', 3), ('two zones', ('swamp', 'desert'))
 
 
 ROWS, COLS = 9, 12
-WIDTH, HEIGHT = 1200, 900  
+WIDTH, HEIGHT = 1000, 500
 
 hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
 hex_radius = hex_height/2   #радиус гекса
 hex_width = hex_radius * 2 / math.sqrt(3)  #ширина гекса
 
-radius = 30 # размер шестиугольника
+radius = (WIDTH + HEIGHT) // 60 # размер шестиугольника
 offset_x_1 = WIDTH // 2
-offset_y_1 = HEIGHT // 2
+offset_y_1 = HEIGHT // 1.3
 
 offset_x = (WIDTH - (COLS - 1)*hex_width * 3/4 - hex_width)//2
 offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
 
-r = 2*radius
-r_ = 2*radius*np.cos(np.deg2rad(30))
 
-image_of_sea = pygame.transform.smoothscale(pygame.image.load('images_of_field/Вода.png').convert_alpha(), (r, r_))
-image_of_desert = pygame.transform.smoothscale(pygame.image.load('images_of_field/Пустыня.png').convert_alpha(), (r, r_))
-image_of_swamp = pygame.transform.smoothscale(pygame.image.load('images_of_field/Болото.png').convert_alpha(), (r, r_))     # Здесь мы загружаем картинки 
-image_of_forest = pygame.transform.smoothscale(pygame.image.load('images_of_field/Лес.png').convert_alpha(), (r, r_))       # в нашу программу и подгоняем по размерам.
-image_of_mountains = pygame.transform.smoothscale(pygame.image.load('images_of_field/Горы.png').convert_alpha(), (r, r_))
-
-image_dict = {'пустыня': image_of_desert, 
-              'вода': image_of_sea, 
-              'болото': image_of_swamp,  # Словарь,связывающий зону и соответствующую ей картинку.
-              'горы': image_of_mountains,
-              'лес': image_of_forest}
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+BROWN = (165, 42, 42)
+WHITE = (255, 255, 255)
+ORANGE = (251, 139, 35)

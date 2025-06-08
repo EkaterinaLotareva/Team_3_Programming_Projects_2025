@@ -1,20 +1,14 @@
 import pygame
+import numpy as np
+import game
+import config
 pygame.init()
 
 
-screen = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
-pygame.display.set_caption('test')
-fps = 60
-clock = pygame.time.Clock()
+screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 
-flRunning = True
-while flRunning:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            flRunning = False
-    
-    clock.tick(fps)
+g = game.Game(screen, config.test_hex, config.test_hints)
+g.run()
 
 
 

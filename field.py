@@ -60,8 +60,9 @@ class BuildingTypeHint(Hint):
     def check(self, hex: coordinates) -> bool:
         for coords in self.field.hex.keys():
             if self.calculate_distance(hex, coords) <= self.distance:
-                if self.field.hex[coords].building[0] == self.building_type:
-                    return True
+                if self.field.hex[coords].building != None:
+                    if self.field.hex[coords].building[1] == self.building_type:
+                        return True
         return False
     
 class BuildingColorHint(Hint):
@@ -77,8 +78,9 @@ class BuildingColorHint(Hint):
     def check(self, hex: coordinates) -> bool:
         for coords in self.field.hex.keys():
             if self.calculate_distance(hex, coords) <= self.distance:
-                if self.field.hex[coords].building[1] == self.color:
-                    return True
+                if self.field.hex[coords].building != None:
+                    if self.field.hex[coords].building[0] == self.color:
+                        return True
         return False
 
 

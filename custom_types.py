@@ -27,5 +27,5 @@ class Animal(Enum):
     NONE = None
 
 
-Building = tuple[BuildingType, Color] or None
+Building = tuple[Color, BuildingType] or None
 
