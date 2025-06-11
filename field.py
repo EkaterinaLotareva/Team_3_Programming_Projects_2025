@@ -18,7 +18,7 @@ class Hex:
 
 
 class Field:
-    def __init__(self, hex: dict[coordinates, [Zone, Animal, Building]]):
+    def __init__(self, hex: dict[coordinates, tuple[Zone, Animal, Building]]):
         self.hex = {}
 
         for coords in hex.keys():
@@ -118,7 +118,7 @@ class SingleZoneHint(Hint):
 
 
 class IntoZonesHint(Hint):
-    zones: [Zone, Zone]
+    zones: tuple[Zone, Zone]
     field: Field
     def __init__(self, zones, field):
         self.zones = zones
