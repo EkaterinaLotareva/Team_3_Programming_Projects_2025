@@ -10,15 +10,15 @@ class Game:
         self.screen = screen
         self.turn = 0
         self.view = View(self.field, self.screen)
-        self.clock = pygame.time.Clock()
         self.mouse_click_pixel = (0, 0)
         self.mouse_click_logic = None
         self.player_asked = None
         self.search = None
-        self.status = {'running': True, 'start_stage': True, 'turn_ended': False, 'game_ended': False, 'winner': 0}
+        self.status = {'running': True, 'start_stage': True, 'turn_ended': False, 'game_ended': False, 'winner': 0, }
         self.colors = [RED, GREEN, BLUE]
         self.hints = []
         self.kriptid = ()
+        self.players = 3
 
         for i, hint in enumerate(hints):
             match hint[0]:
@@ -49,11 +49,11 @@ class Game:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.mouse_click_pixel = (event.pos[0], event.pos[1])
-                self.view.draw_square(self.view.from_pixels_to_logic(self.mouse_click_pixel), self.colors[self.turn % 3])
+                self.view.draw_square(self.view.from_pixels_to_logic(self.mouse_click_pixel), self.colors[self.turn % self.players])
                 return True
 
 
-    def processing_mouse_click(self, event):
+    def process_mouse_click(self, event):
 
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -83,7 +83,7 @@ class Game:
     def question(self):
 
         for event in pygame.event.get():
-            self.processing_mouse_click(event)
+            self.process_mouse_click(event)
             self.process_number_key(event)
             if (self.mouse_click_logic != None) and self.check_find(event):
                 self.find()
@@ -95,9 +95,9 @@ class Game:
 
     def find(self):
         self.status['game_ended'] = True
-        for i in range(3):
+        for i in range(self.players):
             self.answer(self.mouse_click_logic, i)
-        for i in range(3):
+        for i in range(self.players):
             if not self.hints[i].check(self.mouse_click_logic):
                 self.status['game_ended'] = False
 
@@ -106,20 +106,28 @@ class Game:
             if event.key == pygame.K_SPACE:
                 return True
 
+    def final_stage(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
     def run(self):
 
         self.view.draw_field()
 
         while self.status['running']:
-            if self.status['game_ended']:
-                break
-            if self.status['start_stage']:
-                while self.turn <= 5:
-                    if self.process_place_square():
-                        self.turn += 1
-                self.status['start_stage'] = False
-            else:
-                self.question()
+            while not self.status['game_ended']:
+                if self.status['game_ended']:
+                    break
+                if self.status['start_stage']:
+                    while self.turn < self.players * 2:
+                        if self.process_place_square():
+                            self.turn += 1
+                    self.status['start_stage'] = False
+                else:
+                    self.question()
+            self.final_stage()
+
 
         print('игра окончена')
 
