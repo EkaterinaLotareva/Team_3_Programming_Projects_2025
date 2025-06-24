@@ -112,7 +112,7 @@ class Game:
                 pygame.quit()
 
     def run(self):
-
+        self.view.greeting_screen()
         self.view.draw_field()
 
         while self.status['running']:

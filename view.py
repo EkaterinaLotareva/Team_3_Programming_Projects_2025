@@ -91,10 +91,42 @@ class View:
                 pygame.draw.polygon(self.screen, self.logic_colors_to_rgb(hex.building[0]), self.calculate_n_verticles(coords, radius // 2.5, 6))
         pygame.draw.polygon(self.screen, BLACK, self.calculate_n_verticles(coords, radius, 6), 5)
 
-
+    def draw_legend(self):
+        f1 = pygame.font.Font(None, 44)
+        f2 = pygame.font.Font(None, 26)
+        text_heading = f1.render('Легенда карты', True,
+                  (255, 255, 255))
+        text_swamp = f2.render('Болото', True, (255, 255, 255))
+        text_sea = f2.render('Море', True, (255, 255, 255))
+        text_mountains = f2.render('Горы', True, (255, 255, 255))
+        text_forest = f2.render('Лес', True, (255, 255, 255))
+        text_desert = f2.render('Пустыня', True, (255, 255, 255))
+        text_huts = f2.render('Хижины', True, WHITE)
+        text_monuments = f2.render('Монументы', True, WHITE)
+        self.screen.blit(text_heading, (round(0.7*WIDTH), 0.11*HEIGHT))
+        self.screen.blit(self.image_dict['water'], (round(0.65*WIDTH),round(0.20*HEIGHT)))
+        self.screen.blit(text_sea, (round(0.70*WIDTH), round(0.2*HEIGHT)))
+        self.screen.blit(self.image_dict['swamp'], (round(0.75*WIDTH), round(0.20*HEIGHT)))
+        self.screen.blit(text_swamp, (round(0.80*WIDTH), round(0.2*HEIGHT)))
+        self.screen.blit(self.image_dict['desert'], (round(0.85*WIDTH), round(0.20*HEIGHT)))
+        self.screen.blit(text_desert, (round(0.90*WIDTH), round(0.2*HEIGHT)))
+        self.screen.blit(self.image_dict['forest'], (round(0.70*WIDTH), round(0.30*HEIGHT)))
+        self.screen.blit(text_forest, (round(0.75*WIDTH), round(0.3*HEIGHT)))
+        self.screen.blit(self.image_dict['mountain'], (round(0.80*WIDTH), round(0.30*HEIGHT)))
+        self.screen.blit(text_mountains, (round(0.85*WIDTH), round(0.3*HEIGHT)))
+        self.screen.blit(text_huts, (round(0.8*WIDTH), round(0.41*HEIGHT)))
+        pygame.draw.polygon(self.screen, GREEN, self.calculate_n_verticles((round(0.67*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
+        pygame.draw.polygon(self.screen, WHITE, self.calculate_n_verticles((round(0.72*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
+        pygame.draw.polygon(self.screen, BLUE, self.calculate_n_verticles((round(0.77*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
+        self.screen.blit(text_monuments, (round(0.69*WIDTH), round(0.50*HEIGHT)))
+        pygame.draw.polygon(self.screen, WHITE, self.calculate_n_verticles((round(0.81*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
+        pygame.draw.polygon(self.screen, GREEN, self.calculate_n_verticles((round(0.87*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
+        pygame.draw.polygon(self.screen, BLUE, self.calculate_n_verticles((round(0.93*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
+        
     def draw_field(self):
         for i in self.field.hex.keys():
             self.draw_hexagon(i, self.field.hex[i])
+        self.draw_legend()
         pygame.display.update()
 
 
@@ -122,7 +154,11 @@ class View:
     def greeting_screen(self):
         '''отрисовка приветственного экрана с краткими правилами игры, с надписью 'выберите количество игроков' и тремя
          кнопками : 3, 4 и 5, и кнопкой 'продолжить' '''
-        pass
+        self.screen.fill((0, 0, 0))
+        f1 = pygame.font.Font(None, 44)
+        text_heading = f1.render('Криптид', True,
+                  (255, 255, 255))
+        self.screen.blit(text_heading, (400, 500))
 
     def choose_number_of_players_button(self, coords: coordinates):
         '''обработка нажатия на кнопки с количеством игроков на приветственном экране. возвращает None, если координаты
