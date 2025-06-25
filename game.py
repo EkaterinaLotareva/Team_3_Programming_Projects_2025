@@ -37,10 +37,11 @@ class Game:
     def answer(self, hex: coordinates, player: int):
 
         if self.hints[player].check(hex):
-            self.view.draw_circle(hex, self.colors[player])
+            self.view.draw_circle(self.mouse_click_pixel, self.colors[player])
         else:
-            self.view.draw_square(hex, self.colors[player])
+            self.view.draw_square(self.mouse_click_pixel, self.colors[player])
         self.turn += 1
+        self.view.draw_turn((self.turn % self.players) + 1)
 
     def process_place_square(self):
 
@@ -49,8 +50,9 @@ class Game:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.mouse_click_pixel = (event.pos[0], event.pos[1])
-                self.view.draw_square(self.view.from_pixels_to_logic(self.mouse_click_pixel), self.colors[self.turn % self.players])
-                return True
+                if not self.view.from_pixels_to_logic(self.mouse_click_pixel) == (-10, -10):
+                    self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
+                    return True
 
 
     def process_mouse_click(self, event):
@@ -123,6 +125,8 @@ class Game:
                     while self.turn < self.players * 2:
                         if self.process_place_square():
                             self.turn += 1
+                            print((self.turn + 1) % self.players + 1)
+                            self.view.draw_turn((self.turn % self.players) + 1)
                     self.status['start_stage'] = False
                 else:
                     self.question()

@@ -12,7 +12,7 @@ class View:
     def __init__(self, field: Field, screen: pygame.surface.Surface):
         self.field = field
         self.screen = screen
-
+        self.place_for_turn = pygame.Surface((round(WIDTH*0.2), round(HEIGHT*0.05)))
 
         r = 2 * radius
         r_ = 2 * radius * np.cos(np.deg2rad(30))
@@ -81,19 +81,27 @@ class View:
         self.screen.blit(self.image_dict[hex.zone], (coords[0] - radius, coords[1] - round((radius)*np.cos(np.deg2rad(30)))))
         if hex.animal != None:
             if hex.animal == 'jaguar':
-                pygame.draw.polygon(self.screen, ORANGE, self.calculate_n_verticles(coords, radius - 5, 6), 5)
+                pygame.draw.polygon(self.screen, ORANGE, self.calculate_n_verticles(coords, radius - math.ceil(radius / 11), 6), radius // 6)
             elif hex.animal == 'bear':
-                pygame.draw.polygon(self.screen, BROWN, self.calculate_n_verticles(coords, radius - 5, 6), 5)
+                pygame.draw.polygon(self.screen, BROWN, self.calculate_n_verticles(coords, radius - math.ceil(radius / 11), 6), radius // 6)
         if hex.building != None:
             if hex.building[1] == 'hut':
                 pygame.draw.polygon(self.screen, self.logic_colors_to_rgb(hex.building[0]), self.calculate_n_verticles(coords, radius // 2.5, 3))
             elif hex.building[1] == 'monument':
                 pygame.draw.polygon(self.screen, self.logic_colors_to_rgb(hex.building[0]), self.calculate_n_verticles(coords, radius // 2.5, 6))
-        pygame.draw.polygon(self.screen, BLACK, self.calculate_n_verticles(coords, radius, 6), 5)
+        pygame.draw.polygon(self.screen, BLACK, self.calculate_n_verticles(coords, radius, 6), radius // 6)
+
+    def draw_turn(self, player: int):
+        '''пишет на основном экране надпись 'ход игрока (player)' '''
+        self.place_for_turn.fill(BLACK)
+        s = 'Ход игрока ' + str(player)
+        #print(s)
+        text_of_turn = f1.render(s, True, WHITE)
+        self.place_for_turn.blit(text_of_turn, (0, 0))
+        self.screen.blit(self.place_for_turn, (round(WIDTH*0.02), round(HEIGHT*0.04)))
+        pygame.display.update()
 
     def draw_legend(self):
-        f1 = pygame.font.Font(None, 44)
-        f2 = pygame.font.Font(None, 26)
         text_heading = f1.render('Легенда карты', True,
                   (255, 255, 255))
         text_swamp = f2.render('Болото', True, (255, 255, 255))
@@ -103,51 +111,64 @@ class View:
         text_desert = f2.render('Пустыня', True, (255, 255, 255))
         text_huts = f2.render('Хижины', True, WHITE)
         text_monuments = f2.render('Монументы', True, WHITE)
-        self.screen.blit(text_heading, (round(0.7*WIDTH), 0.11*HEIGHT))
-        self.screen.blit(self.image_dict['water'], (round(0.65*WIDTH),round(0.20*HEIGHT)))
-        self.screen.blit(text_sea, (round(0.70*WIDTH), round(0.2*HEIGHT)))
-        self.screen.blit(self.image_dict['swamp'], (round(0.75*WIDTH), round(0.20*HEIGHT)))
-        self.screen.blit(text_swamp, (round(0.80*WIDTH), round(0.2*HEIGHT)))
-        self.screen.blit(self.image_dict['desert'], (round(0.85*WIDTH), round(0.20*HEIGHT)))
-        self.screen.blit(text_desert, (round(0.90*WIDTH), round(0.2*HEIGHT)))
-        self.screen.blit(self.image_dict['forest'], (round(0.70*WIDTH), round(0.30*HEIGHT)))
-        self.screen.blit(text_forest, (round(0.75*WIDTH), round(0.3*HEIGHT)))
-        self.screen.blit(self.image_dict['mountain'], (round(0.80*WIDTH), round(0.30*HEIGHT)))
-        self.screen.blit(text_mountains, (round(0.85*WIDTH), round(0.3*HEIGHT)))
-        self.screen.blit(text_huts, (round(0.8*WIDTH), round(0.41*HEIGHT)))
-        pygame.draw.polygon(self.screen, GREEN, self.calculate_n_verticles((round(0.67*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
-        pygame.draw.polygon(self.screen, WHITE, self.calculate_n_verticles((round(0.72*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
-        pygame.draw.polygon(self.screen, BLUE, self.calculate_n_verticles((round(0.77*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
-        self.screen.blit(text_monuments, (round(0.69*WIDTH), round(0.50*HEIGHT)))
-        pygame.draw.polygon(self.screen, WHITE, self.calculate_n_verticles((round(0.81*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
-        pygame.draw.polygon(self.screen, GREEN, self.calculate_n_verticles((round(0.87*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
-        pygame.draw.polygon(self.screen, BLUE, self.calculate_n_verticles((round(0.93*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
-        
+        text_jaguars_1 = f2.render('Поля c', True, WHITE)
+        text_jaguars_2 = f2.render('ягуарами', True, WHITE)
+        text_bears = f2.render('медведями', True, WHITE)
+        self.screen.blit(text_heading, (round(0.75*WIDTH), 0.11*HEIGHT))
+        self.screen.blit(self.image_dict['water'], (round(0.67*WIDTH),round(0.18*HEIGHT)))
+        self.screen.blit(text_sea, (round(0.73*WIDTH), round(0.18*HEIGHT)))
+        self.screen.blit(self.image_dict['swamp'], (round(0.77*WIDTH), round(0.18*HEIGHT)))
+        self.screen.blit(text_swamp, (round(0.83*WIDTH), round(0.18*HEIGHT)))
+        self.screen.blit(self.image_dict['desert'], (round(0.87*WIDTH), round(0.18*HEIGHT)))
+        self.screen.blit(text_desert, (round(0.93*WIDTH), round(0.18*HEIGHT)))
+        self.screen.blit(self.image_dict['forest'], (round(0.72*WIDTH), round(0.28*HEIGHT)))
+        self.screen.blit(text_forest, (round(0.78*WIDTH), round(0.28*HEIGHT)))
+        self.screen.blit(self.image_dict['mountain'], (round(0.82*WIDTH), round(0.28*HEIGHT)))
+        self.screen.blit(text_mountains, (round(0.88*WIDTH), round(0.28*HEIGHT)))
+        self.screen.blit(text_huts, (round(0.75*WIDTH), round(0.42*HEIGHT)))
+        self.screen.blit(text_jaguars_1, (round(0.91*WIDTH), round(0.51*HEIGHT)))
+        self.screen.blit(text_jaguars_2, (round(0.91*WIDTH), round(0.53*HEIGHT)))
+        self.screen.blit(text_jaguars_1, (round(0.77*WIDTH), round(0.51*HEIGHT)))
+        self.screen.blit(text_bears, (round(0.77*WIDTH), round(0.53*HEIGHT)))
+        self.screen.blit(text_monuments, (round(0.87*WIDTH), round(0.42*HEIGHT)))
+        pygame.draw.polygon(self.screen, GREEN, self.calculate_n_verticles((round(0.72*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
+        #pygame.draw.polygon(self.screen, WHITE, self.calculate_n_verticles((round(0.72*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
+        #pygame.draw.polygon(self.screen, BLUE, self.calculate_n_verticles((round(0.77*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 3))
+        #pygame.draw.polygon(self.screen, WHITE, self.calculate_n_verticles((round(0.81*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
+        #pygame.draw.polygon(self.screen, GREEN, self.calculate_n_verticles((round(0.87*WIDTH), round(0.52*HEIGHT)), radius // 1.2, 6))
+        pygame.draw.polygon(self.screen, BLUE, self.calculate_n_verticles((round(0.84*WIDTH), round(0.43*HEIGHT)), radius // 1.2, 6))
+        self.screen.blit(self.image_dict['mountain'], (round(0.84*WIDTH), round(0.5*HEIGHT)))
+        pygame.draw.polygon(self.screen, ORANGE, self.calculate_n_verticles((round(0.84*WIDTH) + radius, round(0.5*HEIGHT) + radius_vp), radius - math.ceil(radius / 27), 6), radius // 8)
+        self.screen.blit(self.image_dict['desert'], (round(0.70*WIDTH), round(0.5*HEIGHT)))
+        pygame.draw.polygon(self.screen, BROWN, self.calculate_n_verticles((round(0.70*WIDTH) + radius, round(0.5*HEIGHT) + radius_vp), radius, 6), radius // 8)
+        pygame.display.update()
+
+    def draw_buttons(self):
+        text_hints = f2.render('Подсказки', True, WHITE)
+        text_rules = f2.render('Правила', True, WHITE)
+        pygame.draw.rect(self.screen, GREY, (WIDTH*0.70, 0.63*HEIGHT, WIDTH*0.1, HEIGHT*0.08))
+        pygame.draw.rect(self.screen, GREY, (WIDTH*0.83, 0.63*HEIGHT, WIDTH*0.1, HEIGHT*0.08))
+        self.screen.blit(text_hints, (WIDTH*0.72, HEIGHT*0.66))
+        self.screen.blit(text_rules, (WIDTH*0.86, HEIGHT*0.66))
+        pygame.display.update
+
     def draw_field(self):
         for i in self.field.hex.keys():
             self.draw_hexagon(i, self.field.hex[i])
         self.draw_legend()
+        self.draw_buttons()
+        self.draw_turn(1)
         pygame.display.update()
 
 
     def draw_circle(self, coords: coordinates, color):
-        r = radius // 6
-        if color == RED:
-            pygame.draw.circle(self.screen, color, (self.from_logic_to_pixels(coords)[0], self.from_logic_to_pixels(coords)[1] + round(0.6*radius * np.sin(np.deg2rad(60)))), r)
-        elif color == BLUE:
-            pygame.draw.circle(self.screen, color, (self.from_logic_to_pixels(coords)[0] + radius // 6, self.from_logic_to_pixels(coords)[1] + round(0.6*radius * np.sin(np.deg2rad(60)))), r)
-        else:
-            pygame.draw.circle(self.screen, color, (self.from_logic_to_pixels(coords)[0] - radius // 6, self.from_logic_to_pixels(coords)[1] + round(0.6*radius * np.sin(np.deg2rad(60)))), r)
+        r = radius // 4
+        pygame.draw.circle(self.screen, color, (coords[0], coords[1]), r)
         pygame.display.update()
 
     def draw_square(self, coords: coordinates, color):
-        r = radius // 10
-        if color == RED:
-            pygame.draw.polygon(self.screen, color, self.calculate_square_verticles((self.from_logic_to_pixels(coords)[0], self.from_logic_to_pixels(coords)[1] + round(0.6*radius * np.sin(np.deg2rad(60)))), r))
-        elif color == BLUE:
-            pygame.draw.polygon(self.screen, color, self.calculate_square_verticles((self.from_logic_to_pixels(coords)[0] + radius // 6, self.from_logic_to_pixels(coords)[1] + round(0.6*radius * np.sin(np.deg2rad(60)))), r))
-        else:
-            pygame.draw.polygon(self.screen, color, self.calculate_square_verticles((self.from_logic_to_pixels(coords)[0] - radius // 6, self.from_logic_to_pixels(coords)[1] + round(0.6*radius * np.sin(np.deg2rad(60)))), r))
+        r = radius // 4
+        pygame.draw.polygon(self.screen, color, self.calculate_square_verticles((coords[0], coords[1]), r))
         pygame.display.update()
 
 
@@ -197,9 +218,6 @@ class View:
         с легендой карты, надпись чей сейчас ход и кнопка 'посмотреть подсказки' '''
         pass
 
-    def turn(self, player: int):
-        '''пишет на основном экране надпись 'ход игрока (player)' '''
-        pass
 
     def from_game_to_hint_screen_button(self, coords: coordinates):
         '''обработка нажатия на кнопку, возвращающую на экран с подсказками'''
