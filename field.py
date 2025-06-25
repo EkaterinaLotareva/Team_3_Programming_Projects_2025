@@ -39,9 +39,15 @@ class Hint(ABC):
         y1 = coords_1[1]
         x2 = coords_2[0]
         y2 = coords_2[1]
-        z1 = -x1 - y1
-        z2 = -x2 - y2
-        return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2))/2
+        x_new = x2 - x1
+        y_new = y2 - y1 
+        if x_new == y_new:
+            dist = abs(int((x_new + y_new) / 2))
+        elif x_new*y_new < 0:
+            dist = abs(x_new - y_new)
+        else:
+            dist = max(abs(x_new), abs(y_new))
+        return dist
     @abstractmethod
     def check(self, hex: coordinates) -> bool:
         pass
