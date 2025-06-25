@@ -38,8 +38,11 @@ class Game:
 
         if self.hints[player].check(hex):
             self.view.draw_circle(self.mouse_click_pixel, self.colors[player])
+            self.field.add_circles(hex, player)
         else:
             self.view.draw_square(self.mouse_click_pixel, self.colors[player])
+            self.field.add_squares(hex, player)
+            self.process_place_square()
         self.turn += 1
         self.view.draw_turn((self.turn % self.players) + 1)
 
@@ -50,9 +53,15 @@ class Game:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.mouse_click_pixel = (event.pos[0], event.pos[1])
-                if not self.view.from_pixels_to_logic(self.mouse_click_pixel) == (-10, -10):
-                    self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
-                    return True
+                logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
+                if not self.hints[self.turn % self.players].check(logic_coords):
+                    if not logic_coords == (-10, -10):
+                        self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
+                        self.field.add_squares(logic_coords, self.turn % self.players)
+                        return True
+                else:
+                    '''написать что место не соответствует подсказке'''
+                    pass
 
 
     def process_mouse_click(self, event):
@@ -91,9 +100,13 @@ class Game:
                 self.find()
                 break
         if (self.mouse_click_logic != None) and (self.player_asked != None):
-            self.answer(self.mouse_click_logic, self.player_asked)
-            self.mouse_click_logic = None
-            self.player_asked = None
+            if self.player_asked != self.turn % self.players:
+                self.answer(self.mouse_click_logic, self.player_asked)
+                self.mouse_click_logic = None
+                self.player_asked = None
+            else:
+                '''написать что нельзя задать вопрос самому себе'''
+                pass
 
     def find(self):
         self.status['game_ended'] = True
@@ -134,6 +147,11 @@ class Game:
 
 
         print('игра окончена')
+
+
+
+
+
 
 
 
