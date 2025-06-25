@@ -1,7 +1,7 @@
 import math
 import pygame
 ROWS, COLS = 9, 12
-WIDTH, HEIGHT = 1745, 981
+WIDTH, HEIGHT = 1280, 700
 pygame.init()
 hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
 hex_radius = hex_height/2   #радиус гекса
