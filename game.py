@@ -60,8 +60,7 @@ class Game:
                         self.field.add_squares(logic_coords, self.turn % self.players)
                         return True
                 else:
-                    '''написать что место не соответствует подсказке'''
-                    pass
+                    self.view.draw_false_input()
 
 
     def process_mouse_click(self, event):
@@ -105,8 +104,8 @@ class Game:
                 self.mouse_click_logic = None
                 self.player_asked = None
             else:
+                self.view.draw_false_answer()
                 '''написать что нельзя задать вопрос самому себе'''
-                pass
 
     def find(self):
         self.status['game_ended'] = True

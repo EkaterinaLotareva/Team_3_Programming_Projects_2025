@@ -12,7 +12,7 @@ class View:
         self.field = field
         self.screen = screen
         self.place_for_turn = pygame.Surface((round(WIDTH * 0.2), round(HEIGHT * 0.05)))
-
+        self.place_for_text = pygame.Surface((round(WIDTH *0.55), round(HEIGHT * 0.05)))
         r = 2 * radius
         r_ = 2 * radius * np.cos(np.deg2rad(30))
 
@@ -101,6 +101,8 @@ class View:
     def draw_turn(self, player: int):
         '''пишет на основном экране надпись 'ход игрока (player)' '''
         self.place_for_turn.fill(BLACK)
+        self.place_for_text.fill(BLACK)
+        self.screen.blit(self.place_for_text, (round(WIDTH * 0.24), round(HEIGHT * 0.04)))
         s = 'Ход игрока ' + str(player)
         # print(s)
         text_of_turn = f1.render(s, True, WHITE)
@@ -183,11 +185,24 @@ class View:
         pygame.draw.polygon(self.screen, color, self.calculate_square_verticles((coords[0], coords[1]), r))
         pygame.display.update()
 
+    def draw_false_answer(self):
+        self.place_for_text.fill(BLACK)
+        text_false_answer = f1.render('Ошибка! Вопрос не может быть задан самому себе.', True, WHITE)
+        self.place_for_text.blit(text_false_answer, (0, 0))
+        self.screen.blit(self.place_for_text, (round(0.24*WIDTH), round(0.04*HEIGHT)))
+        pygame.display.update()
+
+    def draw_false_input(self):
+        self.place_for_text.fill(BLACK)
+        text_false_input = f1.render('Ошибка! Попытка дать ответ, не соответствующий подсказке.', True, WHITE)
+        self.place_for_text.blit(text_false_input, (0,0))
+        self.screen.blit(self.place_for_text, (round(0.24*WIDTH), round(0.04*HEIGHT)))
+        pygame.display.update()
+
     def greeting_screen(self):
         '''отрисовка приветственного экрана с краткими правилами игры, с надписью 'выберите количество игроков' и тремя
          кнопками : 3, 4 и 5, и кнопкой 'продолжить' '''
         self.screen.fill((0, 0, 0))
-        f1 = pygame.font.Font(None, 44)
         text_heading = f1.render('Криптид', True,
                                  (255, 255, 255))
         self.screen.blit(text_heading, (400, 500))
