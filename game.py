@@ -38,10 +38,10 @@ class Game:
 
         if self.hints[player].check(hex):
             self.view.draw_circle(self.mouse_click_pixel, self.colors[player])
-            self.field.add_circles(coordinates, player)
+            self.field.add_circles(hex, player)
         else:
             self.view.draw_square(self.mouse_click_pixel, self.colors[player])
-            self.field.add_squares(coordinates, player)
+            self.field.add_squares(hex, player)
             self.process_place_square()
         self.turn += 1
         self.view.draw_turn((self.turn % self.players) + 1)

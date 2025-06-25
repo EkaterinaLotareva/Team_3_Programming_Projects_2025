@@ -112,7 +112,7 @@ class View:
         text_heading = f1.render('Легенда карты', True,
                                  (255, 255, 255))
         text_swamp = f2.render('Болото', True, (255, 255, 255))
-        text_sea = f2.render('Море', True, (255, 255, 255))
+        text_sea = f2.render('Вода', True, (255, 255, 255))
         text_mountains = f2.render('Горы', True, (255, 255, 255))
         text_forest = f2.render('Лес', True, (255, 255, 255))
         text_desert = f2.render('Пустыня', True, (255, 255, 255))
