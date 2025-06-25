@@ -1,8 +1,10 @@
 import math
 import pygame
 ROWS, COLS = 9, 12
-WIDTH, HEIGHT = 1745, 981
 pygame.init()
+size_of_screen = pygame.display.get_desktop_sizes()[0]
+WIDTH = size_of_screen[0]
+HEIGHT = size_of_screen[1]
 hex_height = HEIGHT / (ROWS * 3/4 + 1/4)  #высота гекса
 hex_radius = hex_height/2   #радиус гекса
 hex_width = hex_radius * 2 / math.sqrt(3)  #ширина гекса
