@@ -53,24 +53,18 @@ class Game:
         self.view.draw_turn((self.turn % self.players) + 1)
 
     def process_place_square(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                self.mouse_click_pixel = (event.pos[0], event.pos[1])
-                if self.view.exit_button(self.mouse_click_pixel):
-                    pygame.quit()
-                else:
-                    print(1000000)
-                    logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
-                    if not self.hints[self.turn % self.players].check(logic_coords):
-                        if not logic_coords == (-10, -10):
-                            self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
-                            self.field.add_squares(logic_coords, self.turn % self.players)
-                            return True
-                    else:
-                        self.view.draw_false_input()
-                        return False
+        if self.view.exit_button(self.mouse_click_pixel):
+            pygame.quit()
+        else:
+            logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
+            if not self.hints[self.turn % self.players].check(logic_coords):
+                if not logic_coords == (-10, -10):
+                    self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
+                    self.field.add_squares(logic_coords, self.turn % self.players)
+                    return True
+            else:
+                self.view.draw_false_input()
+                return False
 
     def process_mouse_click(self, event):
 
@@ -85,31 +79,22 @@ class Game:
             return True
 
     def process_number_key(self, event):
-
-        if event.type == pygame.QUIT:
-            pygame.quit()
-
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                self.player_asked = 0
-                return True
-            elif event.key == pygame.K_2:
-                self.player_asked = 1
-                return True
-            elif event.key == pygame.K_3:
-                self.player_asked = 2
-                return True
+        if event.key == pygame.K_1:
+            self.player_asked = 0
+            return True
+        elif event.key == pygame.K_2:
+            self.player_asked = 1
+            return True
+        elif event.key == pygame.K_3:
+            self.player_asked = 2
+            return True
         return False
 
 
-    def question(self):
-
-        for event in pygame.event.get():
-            self.process_mouse_click(event)
-            self.process_number_key(event)
-            if (self.mouse_click_logic != None) and self.check_find(event):
-                self.find()
-                break
+    def question(self, event):
+        if (self.mouse_click_logic != None) and self.check_find(event):
+            self.find()
+            return False
         if (self.mouse_click_logic != None) and (self.player_asked != None):
             if self.player_asked != self.turn % self.players:
                 self.answer(self.mouse_click_logic, self.player_asked)
@@ -204,14 +189,14 @@ class Game:
                                     self.view.draw_field()
                 elif self.status['start_stage']:
                     while self.turn < self.players * 2:
-                        if self.process_place_square():
-                            self.turn += 1
-                            print((self.turn + 1) % self.players + 1)
-                            self.view.draw_turn((self.turn % self.players) + 1)
-                        time.sleep(0.1)
                         for event in pygame.event.get():
                             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                                 self.mouse_click_pixel = (event.pos[0], event.pos[1])
+                                if self.process_place_square():
+                                    self.turn += 1
+                                    print((self.turn + 1) % self.players + 1)
+                                    self.view.draw_turn((self.turn % self.players) + 1)
+                                time.sleep(0.1)
                                 if self.view.exit_button(self.mouse_click_pixel):
                                     pygame.quit()
                                 if self.view.to_rules_button_main_screen(self.mouse_click_pixel):
@@ -230,10 +215,10 @@ class Game:
                                     self.view.draw_hint_screen(self.hints, self.player_hint_screen)
                     self.status['start_stage'] = False
                 elif self.status['main_stage']:
-                    self.question()
                     for event in pygame.event.get():
                         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                             self.mouse_click_pixel = (event.pos[0], event.pos[1])
+                            self.mouse_click_logic = self.view.from_pixels_to_logic(self.mouse_click_pixel)
                             if self.view.exit_button(self.mouse_click_pixel):
                                 pygame.quit()
                             if self.view.to_rules_button_main_screen(self.mouse_click_pixel):
@@ -249,7 +234,16 @@ class Game:
                                 self.status['from_main'] = True
                                 self.status['from_greeting'] = False
                                 self.status['from_start'] = False
-                                self.view.hint_screen()
+                                self.view.draw_hint_screen(self.hints, self.player_hint_screen)
+                            self.question(event)
+                        elif event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_1:
+                                self.player_asked = 0
+                            elif event.key == pygame.K_2:
+                                self.player_asked = 1
+                            elif event.key == pygame.K_3:
+                                self.player_asked = 2
+                            self.question(event)
             self.view.winner(self.status['winner'])
             self.final_stage()
 
