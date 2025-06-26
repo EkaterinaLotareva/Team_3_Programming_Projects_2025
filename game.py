@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from view import View
 from field import *
@@ -42,16 +44,19 @@ class Game:
         else:
             self.view.draw_square(self.mouse_click_pixel, self.colors[player])
             self.field.add_squares(hex, player)
-            self.process_place_square()
+            while not self.process_place_square():
+                time.sleep(0.1)
         self.turn += 1
         self.view.draw_turn((self.turn % self.players) + 1)
 
     def process_place_square(self):
-
+        print('inside')
         for event in pygame.event.get():
+            print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                print('action')
                 self.mouse_click_pixel = (event.pos[0], event.pos[1])
                 logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
                 if not self.hints[self.turn % self.players].check(logic_coords):
@@ -139,6 +144,7 @@ class Game:
                             self.turn += 1
                             print((self.turn + 1) % self.players + 1)
                             self.view.draw_turn((self.turn % self.players) + 1)
+                        time.sleep(0.1)
                     self.status['start_stage'] = False
                 else:
                     self.question()
