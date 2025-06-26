@@ -38,7 +38,7 @@ hex1 = {(0, 0): ['mountain', 'jaguar', None], (1, 0): ['forest', None, None], (2
 
 hex2 = { (0, 0) : ['swamp', None, None], (0, 1): ['swamp', None, None], (0,2): ['water', None, None], (0,3):['water', None, None],
             (0,4): ['forest', None, None], (0,5): ['desert', 'bear', None], (-1, 0) : ['swamp', None, None], (-1, 1): ['desert', None, None],
-            (-1,2): ['desert', None, None], (-1,3): ['forest', None, ['green','hut']], (-1,4): ['forest', None None], (-2,1):['desert', 'bear', None], (-2,2):['desert','bear',['white','hut']],(-2,3):['forest',None,None],(-3,2):['forest',None,None],
+            (-1,2): ['desert', None, None], (-1,3): ['forest', None, ['green','hut']], (-1,4): ['forest', None, None], (-2,1):['desert', 'bear', None], (-2,2):['desert','bear',['white','hut']],(-2,3):['forest',None,None],(-3,2):['forest',None,None],
             (1, -2):['forest', None, None], (1, -1):['forest', None, None], (1,0):['water', 'jaguar', None], (1,1):['swamp', None, None], (1,2):['water', None, None], 
             (1,3):['water', None, None], (1,4):['swamp', None, None], (1,5):['desert', None, None], (1,6):['mountain', 'bear', None],
             (2,-3):['desert', None, None], (2, -2):['desert',None, None],(2,-1):['water', None, None], (2,0):['water', None, None],
@@ -49,7 +49,7 @@ hex2 = { (0, 0) : ['swamp', None, None], (0, 1): ['swamp', None, None], (0,2): [
             (3,7):['water', None, None], (3,8):['swamp', 'jaguar', None] , (4,-2):['desert', None, None], (4, -1):['desert', None, None],
             (4,0):['mountain', None, None],(4,1):['mountain', None, None],(4,2):['water', None, None], (4,3):['water', None, None],
             (4,4):['forest', None, None], (4,5):['water', None, None], (4,6):['water', None, None],(4,7):['forest','jaguar', None],
-            (4,8):['forest', 'jaguar', None],(4,9):['swamp', None, None],(5,-1)['desert', None, None],(5,0):['mountain', None, None], (5,1):['mountain', None, None], (5,2):['mountain', None, None],
+            (4,8):['forest', 'jaguar', None],(4,9):['swamp', None, None],(5,-1):['desert', None, None],(5,0):['mountain', None, None], (5,1):['mountain', None, None], (5,2):['mountain', None, None],
             (5,3):['water', None, None], (5,4):['water', None, None],(5,5):['forest', None, None],(5,6):['forest', None, None],
             (5,7):['forest', None, None],(5,8):['forest', None, None], (5,9):['swamp', None, None], (5,10):['swamp', None, None],
             (6,0):['mountain', 'jaguar', None],(6,1):['swamp', 'jaguar',None],(6,2):['forest', None, None],(6,3):['forest',None, None],
@@ -61,7 +61,7 @@ hex2 = { (0, 0) : ['swamp', None, None], (0, 1): ['swamp', None, None], (0,2): [
             (9,3):['desert',None,None],(9,4):['desert',None,None],(9,5):['desert',None,None],(9,6):['mountain',None,['white','monument']],(9,7):['mountain',None,['green','monument']],
             (10,4):['swamp',None,None],(10,5):['swamp',None,None],(10,6):['swamp',None, None],(11,5):['swamp',None,None]}
 
-hex3 = { (0,0):['mountain',None, None], (0,1):['montain', None, None],(0,2):['swamp', None, None], (0,3):['swamp', None, ['blue','hut']], (0,4)['swamp',None,None],
+hex3 = { (0,0):['mountain',None, None], (0,1):['montain', None, None],(0,2):['swamp', None, None], (0,3):['swamp', None, ['blue','hut']], (0,4):['swamp',None,None],
         (0,5):['water','bear',None],(-1,0):['water',None,None],(-1,1):['water',None,None],(-1,2):['swamp',None,None],(-1,3):['forest',None,None],(-1,4):['forest',None, None],
         (-2,1):['water',None, None],(-2,2):['water',None,None],(-2,3):['forest',None,None],(-3,2):['forest',None,None], (0,-1):['forest','jaguar',None],
         (1,-2):['forest',None,['blue','monument']],(1,-1):['forest',None,['white','monument']],(1,0):['water','jaguar',None],(1,1):['mountain','bear',None],(1,2):['desert',None,None],
