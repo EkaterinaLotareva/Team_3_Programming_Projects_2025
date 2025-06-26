@@ -66,7 +66,7 @@ class View:
 
         self.rules = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920) / 3), round(rules.get_height() * (HEIGHT / 1080) / 3)))
 
-        self.rules_2 = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920)), round(rules.get_height() * (HEIGHT / 1080))))
+        self.rules_2 = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920) / 1.5), round(rules.get_height() * (HEIGHT / 1080) / 1.5)))
         
         self.exit = pygame.transform.smoothscale(exit, (round(exit.get_width() * (WIDTH / 1920) / 2), round(exit.get_height() * (HEIGHT / 1080) / 2)))
 
@@ -279,33 +279,30 @@ class View:
     
     def draw_rules_screen(self):
         self.screen.fill(BLACK)
-        self.screen.blit(self.rules, (0.01 * WIDTH, 0))
+        self.screen.blit(self.rules_2, (0.35 * WIDTH, 0))
         self.screen.blit(self.exit, (round(0.99*WIDTH - self.exit.get_width()), round(0.01 * HEIGHT)))
-        text_of_rules_1 = f2.render('Игровое поле состоит из шестиугольников. Каждый из них может быть определенного типа:', True, WHITE)
-        self.screen.blit(text_of_rules_1, (0.01 * WIDTH, 0.07*HEIGHT))
-        self.screen.blit(self.rules_zones, (0.15 * WIDTH, 0.09*HEIGHT))
-        text_of_rules_2 = f2.render('Также на шестиугольниках могут располагаться монументы или хижины различных цветов,', True, WHITE)
-        text_of_rules_3 = f2.render('шестиугольники, которые снабжены контуром коричневого или орнажевого цветов, являются', True, WHITE)
-        text_of_rules_4 = f2.render('местом обитания медведей или ягуаров:', True, WHITE)
-        self.screen.blit(text_of_rules_2, (0.01 * WIDTH, 0.23*HEIGHT))
-        self.screen.blit(text_of_rules_3, (0.01 * WIDTH, 0.26*HEIGHT))
-        self.screen.blit(text_of_rules_4, (0.01 * WIDTH, 0.29*HEIGHT))
-        self.screen.blit(self.rules_zones_2, (0.15 * WIDTH, 0.32 * HEIGHT))
+        self.screen.blit(self.back_text, (round(0.86*WIDTH), round(0.8*HEIGHT)))
+        text_of_rules_1 = f2.render('Цель игры определеть местоположение криптида. Игровое поле состоит из шестиугольников. Каждый из них может быть определенного типа:', True, WHITE)
+        self.screen.blit(text_of_rules_1, (0.01 * WIDTH, 0.17*HEIGHT))
+        self.screen.blit(self.rules_zones, (0.35 * WIDTH, 0.20*HEIGHT))
+        text_of_rules_2 = f2.render('Также на шестиугольниках могут располагаться монументы или хижины различных цветов, шестиугольники, ' \
+        'которые снабжены контуром коричневого или орнажевого цветов, являются', True, WHITE)
+        text_of_rules_3 = f2.render('местом обитания медведей или ягуаров:', True, WHITE)
+        self.screen.blit(text_of_rules_2, (0.01 * WIDTH, 0.34*HEIGHT))
+        self.screen.blit(text_of_rules_3, (0.01 * WIDTH, 0.37*HEIGHT))
+        self.screen.blit(self.rules_zones_2, (0.35 * WIDTH, 0.40 * HEIGHT))
         text_array= []
-        text_array.append(f2.render('       В начале игры каждый из игроков получает подсказку в которой содержится  информация', True, WHITE))
-        text_array.append(f2.render('о местонахождении криптида. Пример подсказки: криптид может находится или в воде или в горах.', True, WHITE))
-        text_array.append(f2.render('Или так: Криптид находиться не дальше двух клеток от синего сооружения. Зная информацию из', True, WHITE))
-        text_array.append(f2.render('трёх подсказок можно одназночно узнать местоположение криптида. В начале игроки по очереди', True, WHITE))
-        text_array.append(f2.render('ставят квадратики на те клетки, где согласно их подсказке не может находится криптид. Для этого', True, WHITE)) 
-        text_array.append(f2.render('необходимо нажать ЛКМ на соответствующую из клеток. Каждый должен поставить по два квадратика.', True, WHITE))
-        text_array.append(f2.render('       Далее начинается основной ход игры. Игроки по очереди задают друг другу вопросы о местонахождении ', True, WHITE))
-        text_array.append(f2.render('криптида, для этого необходимо нажать ЛКМ на ту клетку, о которой вы хотите узнать информацию от другого игрока,', True, WHITE))
-        text_array.append(f2.render('и его номер на клавиатуре 2 или 3, если вы игрок 1. Если согласно подскаске игрока в этой клетке может', True, WHITE))
-        text_array.append(f2.render('быть криптид будет нарисован круг, в противном случае квадрат. Если был нарисован квадрат, то вы тоже', True, WHITE))
-        text_array.append(f2.render('должны отметить, где не может находиться криптид, для этого нажмите ЛКМ на соответствующую клетку.', True, WHITE))
+        text_array.append(f2.render('В начале игры каждый из игроков получает подсказку в которой содержится  информация о местонахождении криптида. Пример подсказки: криптид может находится в воде или в', True, WHITE))
+        text_array.append(f2.render('горах. Или так: Криптид находиться не дальше двух клеток от синего сооружения. Зная информацию из трёх подсказок можно одназночно узнать местоположение криптида.', True, WHITE))
+        text_array.append(f2.render(' В начале игроки по очереди ставят квадратики на те клетки, где согласно их подсказке не может находится криптид. Для этого необходимо нажать ЛКМ на соответствующую из', True, WHITE))
+        text_array.append(f2.render('клеток. Каждый должен поставить по два квадратика. Далее начинается основной ход игры. Игроки по очереди задают друг другу вопросы о местонахождении криптида, для этого ', True, WHITE))
+        text_array.append(f2.render('необходимо нажать ЛКМ на ту клетку, о которой вы хотите узнать информацию от другого игрока, и его номер на клавиатуре 2 или 3, если вы игрок 1. Если согласно подсказке игрока', True, WHITE))
+        text_array.append(f2.render(' в этой клетке может быть криптид будет нарисован круг, в противном случае квадрат. Если был нарисован квадрат, то вы тоже должны отметить, где не может находиться криптид,', True, WHITE))
+        text_array.append(f2.render('для этого нажмите ЛКМ на соответствующую клетку. Если вы предполагаете, где находиться криптид, то во время своего хода вы можете запустить поиск, для этого нажмите ЛКМ, на клетку ', True, WHITE))
+        text_array.append(f2.render('в которой, располагается криптид, после нажмите пробел. В случае того, если ваше предположение оказалось верным вы выиграете.', True, WHITE))
         i = 0
         for texts in text_array:
-            self.screen.blit(texts, (0.01 * WIDTH, (0.49 + i) * HEIGHT))
+            self.screen.blit(texts, (0.01 * WIDTH, (0.58 + i) * HEIGHT))
             i += 0.03
         
         pygame.display.update()
