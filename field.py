@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 from custom_types import coordinates, Building, Zone, Animal, BuildingType, Color
 
+
 @dataclass
 class Hex:
     zone: Zone
@@ -40,18 +41,19 @@ class Hint(ABC):
         x2 = coords_2[0]
         y2 = coords_2[1]
         x_new = x2 - x1
-        y_new = y2 - y1 
+        y_new = y2 - y1
         if x_new == y_new:
             dist = abs(int((x_new + y_new) / 2))
-        elif x_new*y_new < 0:
+        elif x_new * y_new < 0:
             dist = abs(x_new - y_new)
         else:
             dist = max(abs(x_new), abs(y_new))
         return dist
+
     @abstractmethod
     def check(self, hex: coordinates) -> bool:
         pass
-    
+
 
 class BuildingTypeHint(Hint):
     distance: int
@@ -62,7 +64,7 @@ class BuildingTypeHint(Hint):
         self.building_type = building_type
         self.field = field
         self.distance = distance
-    
+
     def check(self, hex: coordinates) -> bool:
         for coords in self.field.hex.keys():
             if self.calculate_distance(hex, coords) <= self.distance:
@@ -70,7 +72,8 @@ class BuildingTypeHint(Hint):
                     if self.field.hex[coords].building[1] == self.building_type:
                         return True
         return False
-    
+
+
 class BuildingColorHint(Hint):
     distance: int
     color: Color
@@ -107,14 +110,17 @@ class AnimalHint(Hint):
                     return True
         return False
 
+
 class SingleZoneHint(Hint):
     distance: int
     zone: Zone
     field: Field
+
     def __init__(self, zone, field, distance):
         self.zone = zone
         self.field = field
         self.distance = distance
+
     def check(self, hex: coordinates) -> bool:
         for coords in self.field.hex.keys():
             if self.calculate_distance(hex, coords) <= self.distance:
@@ -126,9 +132,11 @@ class SingleZoneHint(Hint):
 class IntoZonesHint(Hint):
     zones: tuple[Zone, Zone]
     field: Field
+
     def __init__(self, zones, field):
         self.zones = zones
         self.field = field
+
     def check(self, hex: coordinates) -> bool:
         if self.field.hex[hex].zone == self.zones[0] or self.field.hex[hex].zone == self.zones[1]:
             return True
