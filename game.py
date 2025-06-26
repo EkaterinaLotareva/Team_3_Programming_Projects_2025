@@ -23,6 +23,7 @@ class Game:
         self.hints = []
         self.kriptid = ()
         self.players = 3
+        self.player_hint_screen = -1
 
         for i, hint in enumerate(hints):
             match hint[0]:
@@ -60,6 +61,7 @@ class Game:
                 if self.view.exit_button(self.mouse_click_pixel):
                     pygame.quit()
                 else:
+                    print(1000000)
                     logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
                     if not self.hints[self.turn % self.players].check(logic_coords):
                         if not logic_coords == (-10, -10):
@@ -68,7 +70,7 @@ class Game:
                             return True
                     else:
                         self.view.draw_false_input()
-
+                        return False
 
     def process_mouse_click(self, event):
 
@@ -160,7 +162,7 @@ class Game:
                                 self.status['from_start'] = True
                                 self.status['from_greeting'] = False
                                 self.status['from_main'] = False
-                                self.view.hint_screen()
+                                self.view.draw_hint_screen(self.hints, self.player_hint_screen)
                 elif self.status['rules_screen']:
                     for event in pygame.event.get():
                         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -184,12 +186,16 @@ class Game:
                             self.mouse_click_pixel = (event.pos[0], event.pos[1])
                             if self.view.exit_button(self.mouse_click_pixel):
                                 pygame.quit()
-                            if self.view.show_hint_button(self.mouse_click_pixel):
-                                self.view.show_hint(self.view.show_hint_button(self.mouse_click_pixel))
-                            if self.view.hide_hint_button(self.mouse_click_pixel):
-                                self.view.hide_hint(self.view.hide_hint_button(self.mouse_click_pixel))
+                            if self.view.hint_button(self.mouse_click_pixel) != False:
+                                if self.player_hint_screen == -1:
+                                    self.player_hint_screen = self.view.hint_button(self.mouse_click_pixel)
+                                    self.view.draw_hint_screen(self.hints, self.player_hint_screen)
+                                else:
+                                    self.player_hint_screen = -1
+                                    self.view.draw_hint_screen(self.hints, self.player_hint_screen)
                             if self.view.back_button_hints(self.mouse_click_pixel):
                                 self.status['hint_screen'] = False
+                                self.player_hint_screen = -1
                                 if self.status['from_start']:
                                     self.status['start_stage'] = True
                                     self.view.draw_field()
@@ -221,7 +227,7 @@ class Game:
                                     self.status['from_start'] = True
                                     self.status['from_main'] = False
                                     self.status['from_greeting'] = False
-                                    self.view.hint_screen()
+                                    self.view.draw_hint_screen(self.hints, self.player_hint_screen)
                     self.status['start_stage'] = False
                 elif self.status['main_stage']:
                     self.question()

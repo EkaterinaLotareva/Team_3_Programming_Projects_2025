@@ -52,6 +52,8 @@ class View:
 
         back_arrow = pygame.image.load('images_of_field/Стрелка_назад.png').convert_alpha()
 
+        to_game = pygame.image.load('images_of_field/К_игре.png').convert_alpha()
+
         self.image_of_cryptid_1 = pygame.transform.smoothscale(image_of_cryptid_1, (round(image_of_cryptid_1.get_width()*(1.1*WIDTH / 1920)), 
                                                                                         round(image_of_cryptid_1.get_height()*(1.1*HEIGHT / 1080))))
         self.image_of_cryptid_2 = pygame.transform.smoothscale(image_of_cryptid_2, (round(image_of_cryptid_2.get_width()*(1.1*WIDTH / 1920)), 
@@ -81,6 +83,8 @@ class View:
         self.back_text = pygame.transform.smoothscale(back_text, (round(back_text.get_width()  * (WIDTH / 1920) / 3.5), round(back_text.get_width() * (HEIGHT / 1080) / 4)))
 
         self.back_arrow = pygame.transform.smoothscale(back_arrow, (round(back_arrow.get_width())  * (WIDTH / 1920) / 2 , round(back_arrow.get_height() * (HEIGHT / 1080) / 2)))
+
+        self.to_game = pygame.transform.smoothscale(to_game, (round(back_arrow.get_width())  * (WIDTH / 1920) / 2 , round(back_arrow.get_height() * (HEIGHT / 1080) / 2)))
 
         self.image_dict = {'desert': image_of_desert,  # Словарь,связывающий зону и соответствующую ей картинку
                            'water': image_of_sea,
@@ -221,7 +225,7 @@ class View:
         pygame.draw.rect(self.screen, GREY, (WIDTH * 0.83, 0.63 * HEIGHT, WIDTH * 0.1, HEIGHT * 0.08))
         self.screen.blit(text_hints, (WIDTH * 0.72, HEIGHT * 0.66))
         self.screen.blit(text_rules, (WIDTH * 0.86, HEIGHT * 0.66))
-        pygame.display.update
+        pygame.display.update()
 
     def draw_field(self):
         self.screen.fill(BLACK)
@@ -305,11 +309,11 @@ class View:
             i += 0.03
         
         pygame.display.update()
-    def draw_hint_screen(self, hints, status_of_game):
+    def draw_hint_screen(self, hints, player):
         self.screen.fill(BLACK)
         self.screen.blit(self.hints_heading, (0.3*WIDTH, 0 * HEIGHT))
         self.screen.blit(self.exit, (round(0.99*WIDTH - self.exit.get_width()), round(0.01 * HEIGHT)))
-        self.screen.blit(self.back_text, (0.02*WIDTH, 0.8*HEIGHT))
+        self.screen.blit(self.to_game, (0.85*WIDTH, 0.85*HEIGHT))
         text_of_hints = []
         for hint in hints:
             if type(hint) == BuildingTypeHint:
@@ -323,18 +327,16 @@ class View:
             elif type(hint) == IntoZonesHint:
                 s = 'Криптид находиться или в ' + str(hint.zones[0]) + ' или в ' + str(hint.zones[1])
             text_of_hints.append(f1.render(s, True, WHITE))
-        i = 0
-        for text in text_of_hints:
-            print(self.hints_heading.get_height())
-            s = 'Подсказка игрока: ' + str(i+1) +  '. Нажмите, чтобы открыть'
+        for j in range(len(text_of_hints)):
+            s = 'Подсказка игрока ' + str(j+1) +  '. Нажмите, чтобы открыть.'
             mini_text = f1.render(s, True, WHITE)
-            self.screen.blit(mini_text, (0.1*WIDTH, (self.hints_heading.get_height() +  (i*0.2 + 0.05) * HEIGHT)))
-            self.screen.blit(text, (0.1*WIDTH, (self.hints_heading.get_height() +  (i*0.24 + 0.05) * HEIGHT)))
-            i += 1
-        if not status_of_game:
-            self.screen.blit(self.game_start_2, (0.98*WIDTH - self.game_start_2.get_width(), 0.85*HEIGHT))
-            #self.screen.blit(self.game_start_button, ((0.96*WIDTH - self.game_start_2.get_width(), 0.75*HEIGHT)))
-        
+            self.screen.blit(mini_text, (0.1*WIDTH, (self.hints_heading.get_height() +  (j*0.25 + 0.05) * HEIGHT)))
+            if j == (player - 1):
+                self.screen.blit(text_of_hints[j], (0.1*WIDTH, (self.hints_heading.get_height() +  (j*0.25 + 0.14) * HEIGHT)))
+            else:
+                surface = pygame.Surface((0.5*WIDTH, 0.1*HEIGHT))
+                surface.fill(GREY)
+                self.screen.blit(surface, (0.1 * WIDTH, (self.hints_heading.get_height() +  (j*0.25 + 0.14) * HEIGHT)))
         pygame.display.update()
     def exit_button(self, coords:coordinates):
         x = coords[0]
@@ -353,34 +355,25 @@ class View:
     def to_game_button(self, coords:coordinates):
         x = coords[0]
         y = coords[1]
-        print(x, y)
-        print(round(0.53*WIDTH), round(0.53 * WIDTH + self.game_start_button.get_width()), round(0.57*HEIGHT), round(0.57*HEIGHT + self.game_start_button.get_height()))
         if (x >= round(0.53*WIDTH)) and (x <= round(0.53 * WIDTH + self.game_start_button.get_width())) and (y >= round(0.57*HEIGHT)) and (y <= round(0.57*HEIGHT + self.game_start_button.get_height())):
             return True
         else:
             return False
-    def choose_number_of_players_button(self, coords: coordinates):
-        '''обработка нажатия на кнопки с количеством игроков на приветственном экране. возвращает None, если координаты
-        не попадают ни в одну из кнопок, а если попадают, то возвражает число, написанное на кнопке (3, 4 или 5)'''
-        pass
 
-
-    def show_hint_button(self, coords: coordinates):
-        '''обработка нажатия на кнопку 'показать подсказку' (одну из трех) на экране с подсказками (hint_screen)'''
-        pass
-
-    def hide_hint_button(self, coords: coordinates):
-        '''обработка нажатия на кнопку 'скрыть подсказку' (одну из трех) на экране с подсказками (hint_screen)'''
-        pass
-
-    def show_hint(self, player: int):
-        '''пишет подсказку игрока под номером 'player' на экране с подсказками (hint_screen)'''
-        pass
-
-    def hide_hint(self, player: int):
-        '''убирает подсказку игрока под номером 'player' с экрана с подсказками'''
-        pass
-
+    def hint_button(self, coords:coordinates):
+        x = coords[0]
+        y = coords[1]
+        for i in range(3):
+            if (x >=  0.1*WIDTH) and (x <= 0.6*WIDTH) and (y >= (self.hints_heading.get_height() +  (i*0.25 + 0.14) * HEIGHT)) and (y <= (self.hints_heading.get_height() + 0.1*HEIGHT +  (i*0.25 + 0.14) * HEIGHT)):
+                return i + 1
+        return False
+    def back_button_hints(self, coords:coordinates):
+        x = coords[0]
+        y = coords[1]
+        if (x >= 0.85*WIDTH) and (y >= 0.85*HEIGHT):
+            return True
+        else:
+            return False
     def side_notes(self):
         '''рисует на экране все, что должно там быть помимо поля. поле должно быть слева, а справа - краткая подсказка
         с легендой карты, надпись чей сейчас ход и кнопка 'посмотреть подсказки' '''
@@ -393,8 +386,6 @@ class View:
     def back_button_rules(self, coords):
         pass
 
-    def back_button_hints(self, coords):
-        pass
 
     def to_rules_button_main_screen(self, coords):
         pass
