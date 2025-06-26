@@ -390,7 +390,20 @@ class View:
         '''обработка нажатия на кнопку, возвращающую на экран с подсказками'''
         pass
 
+    def back_button_rules(self, coords):
+        pass
 
+    def back_button_hints(self, coords):
+        pass
+
+    def to_rules_button_main_screen(self, coords):
+        pass
+
+    def to_hints_button(self, coords):
+        pass
+
+    def winner(self, player):
+        pass
 
 
 
