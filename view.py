@@ -16,16 +16,20 @@ class View:
         r = 2 * radius
         r_ = 2 * radius * np.cos(np.deg2rad(30))
 
-        image_of_sea = pygame.transform.smoothscale(pygame.image.load('images_of_field/Вода.png').convert_alpha(),
-                                                    (r, r_))
-        image_of_desert = pygame.transform.smoothscale(pygame.image.load('images_of_field/Пустыня.png').convert_alpha(),
-                                                       (r, r_))
-        image_of_swamp = pygame.transform.smoothscale(pygame.image.load('images_of_field/Болото.png').convert_alpha(),
-                                                      (r, r_))
-        image_of_forest = pygame.transform.smoothscale(pygame.image.load('images_of_field/Лес.png').convert_alpha(),
-                                                       (r, r_))
-        image_of_mountains = pygame.transform.smoothscale(pygame.image.load('images_of_field/Горы.png').convert_alpha(),
-                                                          (r, r_))
+
+        self.image_of_cryptid_1 = pygame.transform.smoothscale(image_of_cryptid_1, (round(image_of_cryptid_1.get_width()*(1.1*WIDTH / 1920)), 
+                                                                                        round(image_of_cryptid_1.get_height()*(1.1*HEIGHT / 1080))))
+        self.image_of_cryptid_2 = pygame.transform.smoothscale(image_of_cryptid_2, (round(image_of_cryptid_2.get_width()*(1.1*WIDTH / 1920)), 
+                                                                                        round(image_of_cryptid_2.get_height()*(1.1*HEIGHT / 1080))))
+        self.cryptid_text = pygame.transform.smoothscale(cryptid_text, (round(cryptid_text.get_width()*(WIDTH / 1920)), round(cryptid_text.get_height()*(HEIGHT / 1080))))
+
+        self.game_start = pygame.transform.smoothscale(game_start, (round(game_start.get_width()*(WIDTH / 1920) / 2), round(game_start.get_height()*(HEIGHT / 1080) / 2)))
+                                                         
+        self.game_start_button = pygame.transform.smoothscale(game_start_button, (round(game_start_button.get_width()*(WIDTH / 1920) / 2.2), round(game_start_button.get_height() * (HEIGHT / 1080) / 2.2)))
+
+        self.rules = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920) / 3), round(rules.get_height() / 3)))
+
+        self.rules_button = pygame.transform.smoothscale(rules_button, (round(rules_button.get_width() * (WIDTH / 1920) * 1.6), round(rules_button.get_height() * (HEIGHT / 1080) * 1.6)))
 
         self.image_dict = {'desert': image_of_desert,  # Словарь,связывающий зону и соответствующую ей картинку
                            'water': image_of_sea,
@@ -202,11 +206,27 @@ class View:
     def greeting_screen(self):
         '''отрисовка приветственного экрана с краткими правилами игры, с надписью 'выберите количество игроков' и тремя
          кнопками : 3, 4 и 5, и кнопкой 'продолжить' '''
-        self.screen.fill((0, 0, 0))
-        text_heading = f1.render('Криптид', True,
+        self.screen.fill(BLACK)
+        text_heading = f1.render('Настольная игра криптид', True,
                                  (255, 255, 255))
-        self.screen.blit(text_heading, (400, 500))
+        self.screen.blit(text_heading, (round(0.4*WIDTH), round(0.2*HEIGHT)))
+        self.screen.blit(self.cryptid_text, (round(WIDTH*0.15), round(HEIGHT*0.08)))
+        self.screen.blit(self.image_of_cryptid_1,(round(WIDTH - self.image_of_cryptid_1.get_width()), round(0.2*HEIGHT)))
+        self.screen.blit(self.image_of_cryptid_2, (round(0*WIDTH), round(HEIGHT - self.image_of_cryptid_2.get_height())))
+        self.screen.blit(self.rules, (round(0.35*WIDTH), round(self.cryptid_text.get_height() + 0.1*HEIGHT)))
+        self.screen.blit(self.rules_button, (round(0.35*WIDTH), round(0.6*HEIGHT)))
+        self.screen.blit(self.game_start, (round(0.55*WIDTH), round(self.cryptid_text.get_height() + 0.1*HEIGHT)))
+        self.screen.blit(self.game_start_button, (round(0.53*WIDTH), round(0.57*HEIGHT)))
+        pygame.display.update()
+    
+    def draw_rules_screen(self):
+        self.screen.fill(BLACK)
+        self.screen.blit(pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920)), round(rules.get_height()))), (0, 0))
+        text_of_rules_1 = f2.render('Игровое поле состоит из шестиугольников. Каждый из них может быть определенного типа:', True, WHITE)
+        self.screen.blit(text_of_rules_1, (0, HEIGHT*0.1))
+        self.screen.blit()
 
+        pygame.display.update()
     def choose_number_of_players_button(self, coords: coordinates):
         '''обработка нажатия на кнопки с количеством игроков на приветственном экране. возвращает None, если координаты
         не попадают ни в одну из кнопок, а если попадают, то возвражает число, написанное на кнопке (3, 4 или 5)'''
@@ -216,8 +236,9 @@ class View:
         '''обработка нажатия на кнопку 'продолжить' на приветственном экране: возвращает True если координаты (coords)
            попадают в кнопку и False если не попадают. так же должны работать все остальные функции, отрабатывающие
            нажатие на кнопку, то есть функции, в названии которых есть слово button и которые принимают на вход координаты'''
+        
         pass
-
+    
     def hint_screen(self):
         '''экран с подсказками, на котором написаны строчки: 'подсказка игрока номер N' для каждого игрока, с кнопками
          'показать подсказку' и 'скрыть подсказку' для каждого игрока'''

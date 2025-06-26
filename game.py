@@ -127,7 +127,7 @@ class Game:
 
     def run(self):
         self.view.greeting_screen()
-        self.view.draw_field()
+        #self.view.draw_field()
 
         while self.status['running']:
             while not self.status['game_ended']:
