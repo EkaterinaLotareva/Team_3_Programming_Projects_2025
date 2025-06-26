@@ -1,5 +1,6 @@
 import math
 import pygame
+import numpy as np
 ROWS, COLS = 9, 12
 pygame.init()
 size_of_screen = pygame.display.get_desktop_sizes()[0]
@@ -19,32 +20,6 @@ offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
 
 f1 = pygame.font.Font(None, round(44 * (WIDTH + HEIGHT) / (1920 + 1080)))
 f2 = pygame.font.Font(None, round(30 * (WIDTH + HEIGHT) / (1920 + 1080)))
-
-image_of_sea = pygame.transform.smoothscale(pygame.image.load('images_of_field/Вода.png').convert_alpha(),
-                                                    (r, r_))
-image_of_desert = pygame.transform.smoothscale(pygame.image.load('images_of_field/Пустыня.png').convert_alpha(),
-                                                       (r, r_))
-image_of_swamp = pygame.transform.smoothscale(pygame.image.load('images_of_field/Болото.png').convert_alpha(),
-                                                      (r, r_))
-image_of_forest = pygame.transform.smoothscale(pygame.image.load('images_of_field/Лес.png').convert_alpha(),
-                                                       (r, r_))
-image_of_mountains = pygame.transform.smoothscale(pygame.image.load('images_of_field/Горы.png').convert_alpha(),
-                                                          (r, r_))
-image_of_cryptid_1 = pygame.image.load('images_of_field/Криптид_картинка 1.png').convert_alpha()
-        
-image_of_cryptid_2 = pygame.image.load('images_of_field/Криптид картинка 2.png').convert_alpha()
-
-cryptid_text = pygame.image.load('images_of_field/Криптид надпись.png').convert_alpha()
-
-game_start = pygame.image.load('images_of_field/Начать игру надпись.png').convert_alpha()
-
-game_start_button = pygame.image.load('images_of_field/Начать игру кнопка.png').convert_alpha()
-
-rules = pygame.image.load('images_of_field/Правила надпись.png').convert_alpha()
-
-rules_button = pygame.image.load('images_of_field/Правила_криптид.png').convert_alpha()
-
-rules_zones = pygame.ima
 
 BLACK = (0, 0, 0)
 TURQUOUISE = (64, 224, 208)

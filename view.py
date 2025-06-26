@@ -1,7 +1,7 @@
 import pygame
 import math
 import numpy as np
-from field import Field, Hex
+from field import Field, Hex, BuildingTypeHint, BuildingColorHint
 from config import *
 from custom_types import *
 
@@ -15,7 +15,34 @@ class View:
         self.place_for_text = pygame.Surface((round(WIDTH *0.55), round(HEIGHT * 0.05)))
         r = 2 * radius
         r_ = 2 * radius * np.cos(np.deg2rad(30))
+        image_of_sea = pygame.transform.smoothscale(pygame.image.load('images_of_field/Вода.png').convert_alpha(), (r, r_))
+        image_of_desert = pygame.transform.smoothscale(pygame.image.load('images_of_field/Пустыня.png').convert_alpha(),
+                                                       (r, r_))
+        image_of_swamp = pygame.transform.smoothscale(pygame.image.load('images_of_field/Болото.png').convert_alpha(),
+                                                            (r, r_))
+        image_of_forest = pygame.transform.smoothscale(pygame.image.load('images_of_field/Лес.png').convert_alpha(),
+                                                            (r, r_))
+        image_of_mountains = pygame.transform.smoothscale(pygame.image.load('images_of_field/Горы.png').convert_alpha(),
+                                                                (r, r_))
+        image_of_cryptid_1 = pygame.image.load('images_of_field/Криптид_картинка 1.png').convert_alpha()
+                
+        image_of_cryptid_2 = pygame.image.load('images_of_field/Криптид картинка 2.png').convert_alpha()
 
+        cryptid_text = pygame.image.load('images_of_field/Криптид надпись.png').convert_alpha()
+
+        game_start = pygame.image.load('images_of_field/Начать игру надпись.png').convert_alpha()
+
+        game_start_button = pygame.image.load('images_of_field/Начать игру кнопка.png').convert_alpha()
+
+        rules = pygame.image.load('images_of_field/Правила надпись.png').convert_alpha()
+
+        rules_button = pygame.image.load('images_of_field/Правила_криптид.png').convert_alpha()
+
+        rules_zones = pygame.image.load('images_of_field/Правила_зоны.png').convert_alpha()
+
+        rules_zones_2 = pygame.image.load('images_of_field/Правила_зоны_2.png').convert_alpha()
+
+        exit = pygame.image.load('images_of_field/Выход.png').convert_alpha()
 
         self.image_of_cryptid_1 = pygame.transform.smoothscale(image_of_cryptid_1, (round(image_of_cryptid_1.get_width()*(1.1*WIDTH / 1920)), 
                                                                                         round(image_of_cryptid_1.get_height()*(1.1*HEIGHT / 1080))))
@@ -27,9 +54,17 @@ class View:
                                                          
         self.game_start_button = pygame.transform.smoothscale(game_start_button, (round(game_start_button.get_width()*(WIDTH / 1920) / 2.2), round(game_start_button.get_height() * (HEIGHT / 1080) / 2.2)))
 
-        self.rules = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920) / 3), round(rules.get_height() / 3)))
+        self.rules = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920) / 3), round(rules.get_height() * (HEIGHT / 1080) / 3)))
+
+        self.rules_2 = pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920)), round(rules.get_height() * (HEIGHT / 1080))))
+        
+        self.exit = pygame.transform.smoothscale(exit, (round(exit.get_width() * (WIDTH / 1920) / 2), round(exit.get_height() * (HEIGHT / 1080) / 2)))
 
         self.rules_button = pygame.transform.smoothscale(rules_button, (round(rules_button.get_width() * (WIDTH / 1920) * 1.6), round(rules_button.get_height() * (HEIGHT / 1080) * 1.6)))
+
+        self.rules_zones = pygame.transform.smoothscale(rules_zones, (round(rules_zones.get_width() * (WIDTH / 1920) / 2), round(rules_zones.get_height() * (HEIGHT/ 1080) / 2)))
+
+        self.rules_zones_2 = pygame.transform.smoothscale(rules_zones_2, (round(rules_zones_2.get_width() * (WIDTH / 1920) / 2), round(rules_zones_2.get_height() * (HEIGHT / 1080) / 2)))
 
         self.image_dict = {'desert': image_of_desert,  # Словарь,связывающий зону и соответствующую ей картинку
                            'water': image_of_sea,
@@ -127,6 +162,7 @@ class View:
         text_jaguars_1 = f2.render('Поля c', True, WHITE)
         text_jaguars_2 = f2.render('ягуарами', True, WHITE)
         text_bears = f2.render('медведями', True, WHITE)
+        self.screen.blit(self.exit, (round(0.99*WIDTH - self.exit.get_width()), round(0.01 * HEIGHT)))
         self.screen.blit(text_heading, (round(0.75 * WIDTH), 0.11 * HEIGHT))
         self.screen.blit(self.image_dict['water'], (round(0.67 * WIDTH), round(0.18 * HEIGHT)))
         self.screen.blit(text_sea, (round(0.73 * WIDTH), round(0.18 * HEIGHT)))
@@ -172,6 +208,7 @@ class View:
         pygame.display.update
 
     def draw_field(self):
+        self.screen.fill(BLACK)
         for i in self.field.hex.keys():
             self.draw_hexagon(i, self.field.hex[i])
         self.draw_legend()
@@ -203,10 +240,11 @@ class View:
         self.screen.blit(self.place_for_text, (round(0.24*WIDTH), round(0.04*HEIGHT)))
         pygame.display.update()
 
-    def greeting_screen(self):
+    def draw_greeting_screen(self):
         '''отрисовка приветственного экрана с краткими правилами игры, с надписью 'выберите количество игроков' и тремя
          кнопками : 3, 4 и 5, и кнопкой 'продолжить' '''
         self.screen.fill(BLACK)
+        self.screen.blit(self.exit, (round(0.99*WIDTH - self.exit.get_width()), round(0.01 * HEIGHT)))
         text_heading = f1.render('Настольная игра криптид', True,
                                  (255, 255, 255))
         self.screen.blit(text_heading, (round(0.4*WIDTH), round(0.2*HEIGHT)))
@@ -221,23 +259,71 @@ class View:
     
     def draw_rules_screen(self):
         self.screen.fill(BLACK)
-        self.screen.blit(pygame.transform.smoothscale(rules, (round(rules.get_width() * (WIDTH / 1920)), round(rules.get_height()))), (0, 0))
+        self.screen.blit(self.rules, (0.01 * WIDTH, 0))
+        self.screen.blit(self.exit, (round(0.99*WIDTH - self.exit.get_width()), round(0.01 * HEIGHT)))
         text_of_rules_1 = f2.render('Игровое поле состоит из шестиугольников. Каждый из них может быть определенного типа:', True, WHITE)
-        self.screen.blit(text_of_rules_1, (0, HEIGHT*0.1))
-        self.screen.blit()
-
+        self.screen.blit(text_of_rules_1, (0.01 * WIDTH, 0.07*HEIGHT))
+        self.screen.blit(self.rules_zones, (0.15 * WIDTH, 0.09*HEIGHT))
+        text_of_rules_2 = f2.render('Также на шестиугольниках могут располагаться монументы или хижины различных цветов,', True, WHITE)
+        text_of_rules_3 = f2.render('шестиугольники, которые снабжены контуром коричневого или орнажевого цветов, являются', True, WHITE)
+        text_of_rules_4 = f2.render('местом обитания медведей или ягуаров:', True, WHITE)
+        self.screen.blit(text_of_rules_2, (0.01 * WIDTH, 0.23*HEIGHT))
+        self.screen.blit(text_of_rules_3, (0.01 * WIDTH, 0.26*HEIGHT))
+        self.screen.blit(text_of_rules_4, (0.01 * WIDTH, 0.29*HEIGHT))
+        self.screen.blit(self.rules_zones_2, (0.15 * WIDTH, 0.32 * HEIGHT))
+        text_array= []
+        text_array.append(f2.render('       В начале игры каждый из игроков получает подсказку в которой содержится  информация', True, WHITE))
+        text_array.append(f2.render('о местонахождении криптида. Пример подсказки: криптид может находится или в воде или в горах.', True, WHITE))
+        text_array.append(f2.render('Или так: Криптид находиться не дальше двух клеток от синего сооружения. Зная информацию из', True, WHITE))
+        text_array.append(f2.render('трёх подсказок можно одназночно узнать местоположение криптида. В начале игроки по очереди', True, WHITE))
+        text_array.append(f2.render('ставят квадратики на те клетки, где согласно их подсказке не может находится криптид. Для этого', True, WHITE)) 
+        text_array.append(f2.render('необходимо нажать ЛКМ на соответствующую из клеток. Каждый должен поставить по два квадратика.', True, WHITE))
+        text_array.append(f2.render('       Далее начинается основной ход игры. Игроки по очереди задают друг другу вопросы о местонахождении ', True, WHITE))
+        text_array.append(f2.render('криптида, для этого необходимо нажать ЛКМ на ту клетку, о которой вы хотите узнать информацию от другого игрока,', True, WHITE))
+        text_array.append(f2.render('и его номер на клавиатуре 2 или 3, если вы игрок 1. Если согласно подскаске игрока в этой клетке может', True, WHITE))
+        text_array.append(f2.render('быть криптид будет нарисован круг, в противном случае квадрат. Если был нарисован квадрат, то вы тоже', True, WHITE))
+        text_array.append(f2.render('должны отметить, где не может находиться криптид, для этого нажмите ЛКМ на соответствующую клетку.', True, WHITE))
+        i = 0
+        for texts in text_array:
+            self.screen.blit(texts, (0.01 * WIDTH, (0.49 + i) * HEIGHT))
+            i += 0.03
         pygame.display.update()
+    #def draw_hint_screen(self, hints):
+        #for hint in hints:
+        #    if hint.type == BuildingTypeHint
+        #self.screen.fill(BLACK)
+        #text_of_hint_1 = 
+        #text_of_hint_2 = 
+        #text_of_hint_3 = 
+        pass
+    def exit_button(self, coords:coordinates):
+        x = coords[0]
+        y = coords[1]
+        if (x >= round(0.99*WIDTH - self.exit.get_width())) and (y <= round(self.exit.get_height())):
+            return True
+        else:
+            return False
+    def to_rules_button_start_screen(self, coords:coordinates):
+        x = coords[0]
+        y = coords[1]
+        if (x >= round(0.35*WIDTH)) and (x <= round(0.35*WIDTH + self.rules_button.get_width())) and (y >= round(0.6*HEIGHT)) and (y <= round(0.6*HEIGHT + self.rules_button.get_height())):
+            return True
+        else:
+            return False
+    def to_game_button(self, coords:coordinates):
+        x = coords[0]
+        y = coords[1]
+        print(x, y)
+        print(round(0.53*WIDTH), round(0.53 * WIDTH + self.game_start_button.get_width()), round(0.57*HEIGHT), round(0.57*HEIGHT + self.game_start_button.get_height()))
+        if (x >= round(0.53*WIDTH)) and (x <= round(0.53 * WIDTH + self.game_start_button.get_width())) and (y >= round(0.57*HEIGHT)) and (y <= round(0.57*HEIGHT + self.game_start_button.get_height())):
+            return True
+        else:
+            return False
     def choose_number_of_players_button(self, coords: coordinates):
         '''обработка нажатия на кнопки с количеством игроков на приветственном экране. возвращает None, если координаты
         не попадают ни в одну из кнопок, а если попадают, то возвражает число, написанное на кнопке (3, 4 или 5)'''
         pass
 
-    def to_game_button(self, coords: coordinates):
-        '''обработка нажатия на кнопку 'продолжить' на приветственном экране: возвращает True если координаты (coords)
-           попадают в кнопку и False если не попадают. так же должны работать все остальные функции, отрабатывающие
-           нажатие на кнопку, то есть функции, в названии которых есть слово button и которые принимают на вход координаты'''
-        
-        pass
     
     def hint_screen(self):
         '''экран с подсказками, на котором написаны строчки: 'подсказка игрока номер N' для каждого игрока, с кнопками

@@ -16,7 +16,7 @@ class Game:
         self.mouse_click_logic = None
         self.player_asked = None
         self.search = None
-        self.status = {'running': True, 'start_stage': True, 'turn_ended': False, 'game_ended': False, 'winner': 0, }
+        self.status = {'running': True, 'greeting_screen': True, 'hint_screen': False, 'rules_screen': False, 'start_stage': False, 'turn_ended': False, 'game_ended': False, 'winner': 0, }
         self.colors = [RED, GREEN, BLUE]
         self.hints = []
         self.kriptid = ()
@@ -56,16 +56,19 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                print('action')
                 self.mouse_click_pixel = (event.pos[0], event.pos[1])
-                logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
-                if not self.hints[self.turn % self.players].check(logic_coords):
-                    if not logic_coords == (-10, -10):
-                        self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
-                        self.field.add_squares(logic_coords, self.turn % self.players)
-                        return True
+                print('action')
+                if self.view.exit_button(self.mouse_click_pixel):
+                    pygame.quit()
                 else:
-                    self.view.draw_false_input()
+                    logic_coords = self.view.from_pixels_to_logic(self.mouse_click_pixel)
+                    if not self.hints[self.turn % self.players].check(logic_coords):
+                        if not logic_coords == (-10, -10):
+                            self.view.draw_square(self.mouse_click_pixel, self.colors[self.turn % self.players])
+                            self.field.add_squares(logic_coords, self.turn % self.players)
+                            return True
+                    else:
+                        self.view.draw_false_input()
 
 
     def process_mouse_click(self, event):
@@ -74,7 +77,11 @@ class Game:
             pygame.quit()
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.mouse_click_pixel = (event.pos[0], event.pos[1])
-            self.mouse_click_logic = self.view.from_pixels_to_logic(self.mouse_click_pixel)
+            print('fqfqwfqrfqrfqerfqerfqfqrrf')
+            if self.view.exit_button(self.mouse_click_pixel):
+                pygame.quit()
+            else:
+                self.mouse_click_logic = self.view.from_pixels_to_logic(self.mouse_click_pixel)
             return True
 
     def process_number_key(self, event):
@@ -131,14 +138,33 @@ class Game:
                 pygame.quit()
 
     def run(self):
-        self.view.greeting_screen()
-        #self.view.draw_field()
+        #self.view.draw_rules_screen()
+        #self.view.draw_greeting_screen()
 
         while self.status['running']:
             while not self.status['game_ended']:
-                if self.status['game_ended']:
-                    break
-                if self.status['start_stage']:
+                if self.status['greeting_screen']:
+                    self.view.draw_greeting_screen()
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                            self.mouse_click_pixel = (event.pos[0], event.pos[1])
+                            if self.view.exit_button(self.mouse_click_pixel):
+                                pygame.quit()
+                            elif self.view.to_rules_button_start_screen(self.mouse_click_pixel):
+                                self.status['greeting_screen'] = False
+                                self.status['rules_screen'] = True
+                                self.view.draw_rules_screen() 
+                            elif self.view.to_game_button(self.mouse_click_pixel): 
+                                self.status['greeting_screen'] = False
+                                self.status['start_stage'] = True  
+                                self.view.draw_field()
+                elif self.status['rules_screen']:
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                            self.mouse_click_pixel = (event.pos[0], event.pos[1])
+                            if self.view.exit_button(self.mouse_click_pixel):
+                                pygame.quit() 
+                elif self.status['start_stage']:
                     while self.turn < self.players * 2:
                         if self.process_place_square():
                             self.turn += 1
