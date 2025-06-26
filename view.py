@@ -1,7 +1,7 @@
 import pygame
 import math
 import numpy as np
-from field import Field, Hex, BuildingTypeHint, BuildingColorHint
+from field import Field, Hex, BuildingTypeHint, BuildingColorHint, AnimalHint, SingleZoneHint, IntoZonesHint
 from config import *
 from custom_types import *
 
@@ -44,6 +44,14 @@ class View:
 
         exit = pygame.image.load('images_of_field/Выход.png').convert_alpha()
 
+        hints_heading = pygame.image.load('images_of_field/Подсказки.png').convert_alpha()
+
+        game_start_2 = pygame.image.load('images_of_field/Начать_игру_2.png').convert_alpha()
+
+        back_text = pygame.image.load('images_of_field/Назад.png').convert_alpha()
+
+        back_arrow = pygame.image.load('images_of_field/Стрелка_назад.png').convert_alpha()
+
         self.image_of_cryptid_1 = pygame.transform.smoothscale(image_of_cryptid_1, (round(image_of_cryptid_1.get_width()*(1.1*WIDTH / 1920)), 
                                                                                         round(image_of_cryptid_1.get_height()*(1.1*HEIGHT / 1080))))
         self.image_of_cryptid_2 = pygame.transform.smoothscale(image_of_cryptid_2, (round(image_of_cryptid_2.get_width()*(1.1*WIDTH / 1920)), 
@@ -65,6 +73,14 @@ class View:
         self.rules_zones = pygame.transform.smoothscale(rules_zones, (round(rules_zones.get_width() * (WIDTH / 1920) / 2), round(rules_zones.get_height() * (HEIGHT/ 1080) / 2)))
 
         self.rules_zones_2 = pygame.transform.smoothscale(rules_zones_2, (round(rules_zones_2.get_width() * (WIDTH / 1920) / 2), round(rules_zones_2.get_height() * (HEIGHT / 1080) / 2)))
+
+        self.hints_heading = pygame.transform.smoothscale(hints_heading, (round(hints_heading.get_width() * (WIDTH / 1920) / 1.8), round(hints_heading.get_height() * (HEIGHT / 1080) / 1.8)))
+
+        self.game_start_2 = pygame.transform.smoothscale(game_start_2, (round(game_start_2.get_width() * (WIDTH / 1920) / 3), round(game_start_2.get_height() * (HEIGHT / 1080) / 3)))
+
+        self.back_text = pygame.transform.smoothscale(back_text, (round(back_text.get_width()  * (WIDTH / 1920) / 3.5), round(back_text.get_width() * (HEIGHT / 1080) / 4)))
+
+        self.back_arrow = pygame.transform.smoothscale(back_arrow, (round(back_arrow.get_width())  * (WIDTH / 1920) / 2 , round(back_arrow.get_height() * (HEIGHT / 1080) / 2)))
 
         self.image_dict = {'desert': image_of_desert,  # Словарь,связывающий зону и соответствующую ей картинку
                            'water': image_of_sea,
@@ -287,15 +303,39 @@ class View:
         for texts in text_array:
             self.screen.blit(texts, (0.01 * WIDTH, (0.49 + i) * HEIGHT))
             i += 0.03
+        
         pygame.display.update()
-    #def draw_hint_screen(self, hints):
-        #for hint in hints:
-        #    if hint.type == BuildingTypeHint
-        #self.screen.fill(BLACK)
-        #text_of_hint_1 = 
-        #text_of_hint_2 = 
-        #text_of_hint_3 = 
-        pass
+    def draw_hint_screen(self, hints, status_of_game):
+        self.screen.fill(BLACK)
+        self.screen.blit(self.hints_heading, (0.3*WIDTH, 0 * HEIGHT))
+        self.screen.blit(self.exit, (round(0.99*WIDTH - self.exit.get_width()), round(0.01 * HEIGHT)))
+        self.screen.blit(self.back_text, (0.02*WIDTH, 0.8*HEIGHT))
+        text_of_hints = []
+        for hint in hints:
+            if type(hint) == BuildingTypeHint:
+                s = 'Криптид находится не дальше ' + str(hint.distance) + ' клеток от ' + str(hint.building_type)
+            elif type(hint) == BuildingColorHint:
+                s = 'Криптид находится не дальше ' + str(hint.distance) + ' клеток от ' + str(hint.color) + ' сооружения'
+            elif type(hint) == AnimalHint: 
+                s = 'Криптид находится не дальше ' + str(hint.distance) + ' клеток от ' + str(hint.animal)
+            elif type(hint) == SingleZoneHint:
+                s = 'Криптид находится не дальше ' + str(hint.distance) + ' клеток от ' + str(hint.zone)
+            elif type(hint) == IntoZonesHint:
+                s = 'Криптид находиться или в ' + str(hint.zones[0]) + ' или в ' + str(hint.zones[1])
+            text_of_hints.append(f1.render(s, True, WHITE))
+        i = 0
+        for text in text_of_hints:
+            print(self.hints_heading.get_height())
+            s = 'Подсказка игрока: ' + str(i+1) +  '. Нажмите, чтобы открыть'
+            mini_text = f1.render(s, True, WHITE)
+            self.screen.blit(mini_text, (0.1*WIDTH, (self.hints_heading.get_height() +  (i*0.2 + 0.05) * HEIGHT)))
+            self.screen.blit(text, (0.1*WIDTH, (self.hints_heading.get_height() +  (i*0.24 + 0.05) * HEIGHT)))
+            i += 1
+        if not status_of_game:
+            self.screen.blit(self.game_start_2, (0.98*WIDTH - self.game_start_2.get_width(), 0.85*HEIGHT))
+            #self.screen.blit(self.game_start_button, ((0.96*WIDTH - self.game_start_2.get_width(), 0.75*HEIGHT)))
+        
+        pygame.display.update()
     def exit_button(self, coords:coordinates):
         x = coords[0]
         y = coords[1]
@@ -324,11 +364,6 @@ class View:
         не попадают ни в одну из кнопок, а если попадают, то возвражает число, написанное на кнопке (3, 4 или 5)'''
         pass
 
-    
-    def hint_screen(self):
-        '''экран с подсказками, на котором написаны строчки: 'подсказка игрока номер N' для каждого игрока, с кнопками
-         'показать подсказку' и 'скрыть подсказку' для каждого игрока'''
-        pass
 
     def show_hint_button(self, coords: coordinates):
         '''обработка нажатия на кнопку 'показать подсказку' (одну из трех) на экране с подсказками (hint_screen)'''
