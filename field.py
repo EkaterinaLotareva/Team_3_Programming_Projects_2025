@@ -27,11 +27,11 @@ class Field:
 
         """ self.hex - словарь из объектов класса Hex в формате: {(x, y): Hex(zone, animal, building)}"""
 
-    def add_circles(self, coords: coordinates, player):
-        self.hex[coords].circles.append(player)
+    def add_circles(self, coords: coordinates, coords_pixel:coordinates, player):
+        self.hex[coords].circles.append([coords_pixel, player])
 
-    def add_squares(self, coords: coordinates, player):
-        self.hex[coords].squares.append(player)
+    def add_squares(self, coords: coordinates, coords_pixel:coordinates, player):
+        self.hex[coords].squares.append([coords_pixel, player])
 
 
 class Hint(ABC):

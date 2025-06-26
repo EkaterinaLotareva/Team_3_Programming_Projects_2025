@@ -21,6 +21,8 @@ offset_y = (HEIGHT - (ROWS - 1)* hex_height * 3/4 - hex_height)//2
 f1 = pygame.font.Font(None, round(44 * (WIDTH + HEIGHT) / (1920 + 1080)))
 f2 = pygame.font.Font(None, round(30 * (WIDTH + HEIGHT) / (1920 + 1080)))
 
+english_russian_dict = {'swamp' : 'болоте','forest' : 'леса','water' : 'воды', 'desert' : 'пустыне', 'mountain' : 'гор',
+                        'white' : 'белого', 'blue' : 'синего', 'green':'зелёного', 'jaguar' : 'ягуаров','bear' : 'медведей', 'hut':'хижины', 'monument' : 'монумента'}
 BLACK = (0, 0, 0)
 TURQUOUISE = (64, 224, 208)
 NEW_COLOR = (14, 118, 130)
