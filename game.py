@@ -22,6 +22,7 @@ class Game:
         self.players = 3
         self.player_hint_screen = -1
         self.need_square = False
+        self.find_active = False
 
         for i, hint in enumerate(hints):
             match hint[0]:
@@ -46,8 +47,9 @@ class Game:
             self.view.draw_square(self.mouse_click_pixel, self.colors[player])
             self.field.add_squares(hex, self.mouse_click_pixel, self.colors[player])
             return False
-        self.turn += 1
-        self.view.draw_turn((self.turn % self.players) + 1)
+        if not self.find_active:
+            self.turn += 1
+            self.view.draw_turn((self.turn % self.players) + 1)
         return True
     def process_place_square(self):
         if self.view.exit_button(self.mouse_click_pixel):
@@ -83,12 +85,17 @@ class Game:
                 self.player_asked = None
             else:
                 self.need_square = True
-        else:
+        elif not self.find_active:
             self.view.draw_false_answer()
 
     def find(self):
         self.status['game_ended'] = True
+        self.find_active = True
         for i in range(self.players):
+            #self.mouse_click_logic = self.view.from_pixels_to_logic(self.mouse_click_pixel)
+            center_coords = self.view.from_logic_to_pixels(self.mouse_click_logic)
+            new_coords = (center_coords[0] + (i - 1) * (radius // 2), center_coords[1])
+            self.mouse_click_pixel = new_coords
             self.answer(self.mouse_click_logic, i)
         for i in range(self.players):
             if not self.hints[i].check(self.mouse_click_logic):
@@ -229,6 +236,8 @@ class Game:
                                 self.player_asked = 2
                             elif event.key == pygame.K_SPACE:
                                 self.find()
+                                self.turn += 1
+                                self.view.draw_turn((self.turn % self.players) + 1)
                             self.question()
             for event in pygame.event.get():
                 self.view.draw_winner(self.status['winner'])
