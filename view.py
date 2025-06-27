@@ -13,6 +13,7 @@ class View:
         self.screen = screen
         self.place_for_turn = pygame.Surface((round(WIDTH * 0.2), round(HEIGHT * 0.05)))
         self.place_for_text = pygame.Surface((round(WIDTH *0.55), round(HEIGHT * 0.05)))
+        self.log_screen = pygame.Surface((round(WIDTH*0.3), round(HEIGHT*0.08)))
         r = 2 * radius
         r_ = 2 * radius * np.cos(np.deg2rad(30))
         image_of_sea = pygame.transform.smoothscale(pygame.image.load('images_of_field/Вода.png').convert_alpha(), (r, r_))
@@ -379,10 +380,6 @@ class View:
             return True
         else:
             return False
-    def from_game_to_hint_screen_button(self, coords: coordinates):
-        '''обработка нажатия на кнопку, возвращающую на экран с подсказками'''
-        pass
-
     def back_button_rules(self, coords):
         x = coords[0]
         y = coords[1]
@@ -407,8 +404,14 @@ class View:
         else:
             return False
 
-    def winner(self, player):
-        pass
+    def draw_winner(self, player):
+        s = 'Победил игрок ' + str(player)
+        text_of_winner = f1.render(s, True, WHITE)
+        self.log_screen.fill(BLACK)
+        self.log_screen.blit(text_of_winner, (0, 0))
+        self.screen.blit(self.log_screen, (0.7*WIDTH, 0.82*HEIGHT))
+        pygame.display.update()
+        
 
 
 

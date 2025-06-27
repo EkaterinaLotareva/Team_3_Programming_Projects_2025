@@ -79,9 +79,9 @@ class Game:
             return True
 
     def question(self):
-        if (self.player_asked) != (self.turn % self.players) and (self.player_asked != None):
+        if ((self.player_asked) != (self.turn % self.players)) and (self.player_asked != None):
             if self.answer(self.mouse_click_logic, self.player_asked):
-                self.mouse_click_logic = None
+                #self.mouse_click_logic = None
                 self.mouse_click_pixel = None
                 self.player_asked = None
             else:
@@ -97,13 +97,9 @@ class Game:
             if not self.hints[i].check(self.mouse_click_logic):
                 self.status['game_ended'] = False
             else:
-                self.status['winner'] = self.turn % self.players
+                self.status['winner'] = self.turn % self.players + 1
                 print('WInner')
 
-    def final_stage(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
 
     def run(self):
 
@@ -236,10 +232,16 @@ class Game:
                             elif event.key == pygame.K_SPACE:
                                 self.find()
                             self.question()
-            self.view.winner(self.status['winner'])
-            print(print(self.status['winner']))
-            print('You win')
-            self.final_stage()
+            for event in pygame.event.get():
+                self.view.draw_winner(self.status['winner'])
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    self.mouse_click_pixel = (event.pos[0], event.pos[1])
+                    print(self.mouse_click_pixel)
+                    if self.view.exit_button(self.mouse_click_pixel):
+                        pygame.quit()
+
 
 
         print('игра окончена')
